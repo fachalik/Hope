@@ -8,5 +8,6 @@ const colors = {
   soft_grayOrange: '#F7F6F1',
   backgroundColor: '#FFFFFF',
   warning: '#CF212A',
+  transparent: 'rgba(52, 52, 52, 0.8)',
 };
 export default colors;

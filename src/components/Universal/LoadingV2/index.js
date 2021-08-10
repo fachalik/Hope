@@ -6,8 +6,8 @@ const LoadingV2 = () => {
   return (
     <View style={styles.overlay}>
       <View style={styles.container}>
-        <ActivityIndicator color={'white'} />
-        <Text style={styles.text}>Loading...</Text>
+        <ActivityIndicator color={colors.orange} />
+        <Text style={styles.text}>Memuat...</Text>
       </View>
     </View>
   );
@@ -18,20 +18,22 @@ export default LoadingV2;
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'white',
+    backgroundColor: colors.transparent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: 'black',
+    backgroundColor: colors.backgroundColor,
     flexDirection: 'row',
-    padding: 20,
+    paddingHorizontal: 50,
+    paddingVertical: 18,
     borderRadius: 8,
   },
   text: {
+    fontFamily: 'Roboto-Medium',
     marginLeft: 16,
-    color: colors.white,
-    fontSize: 18,
+    color: colors.black,
+    fontSize: 12,
     fontWeight: '500',
   },
 });

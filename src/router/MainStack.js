@@ -4,7 +4,7 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {BottomNavigator} from '../components';
 import {
   Home,
-  Account,
+  Profil,
   ChatBot,
   ChatBotScreen,
   ChatDoctorScreen,
@@ -209,10 +209,10 @@ const ChatStackScreen = (props, {navigation}) => {
 
 const AccountStackScreen = (props, {navigation}) => {
   return (
-    <AccountStack.Navigator initialRouteName="Account">
+    <AccountStack.Navigator initialRouteName="Profil">
       <AccountStack.Screen
-        name="Account"
-        component={Account}
+        name="Profil"
+        component={Profil}
         options={{headerShown: false}}
       />
       <AccountStack.Screen

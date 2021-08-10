@@ -22,13 +22,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: wp('100%'),
     height: hp('100%'),
-    backgroundColor: 'white',
     marginVertical: 10,
   },
   image: {
     height: hp('30%'),
     width: wp('80%'),
-    borderRadius: 10,
     marginVertical: hp('3%'),
     justifyContent: 'center',
     alignSelf: 'center',
