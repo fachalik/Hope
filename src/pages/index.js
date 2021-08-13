@@ -1,6 +1,5 @@
 //HomeStack
 import Home from './MainStack/HomeStack/Home';
-import ChatBot from './MainStack/HomeStack/ChatBot';
 import ChatBotScreen from './MainStack/HomeStack/ChatBotScreen';
 import ChatDoctorScreen from './MainStack/HomeStack/ChatDoctorScreen';
 import ChatPsikologScreen from './MainStack/HomeStack/ChatPsikologScreen';
@@ -36,7 +35,6 @@ import Splash from './Splash';
 
 export {
   Home,
-  ChatBot,
   ChatBotScreen,
   ChatDoctorScreen,
   ChatPsikologScreen,

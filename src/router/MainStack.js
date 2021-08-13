@@ -5,7 +5,6 @@ import {BottomNavigator} from '../components';
 import {
   Home,
   Profil,
-  ChatBot,
   ChatBotScreen,
   ChatDoctorScreen,
   ChatPsikologScreen,
@@ -131,6 +130,25 @@ const HomeStackScreen = (props, {navigation}) => {
         component={DetailSearchLayananKesehatan}
         options={{headerShown: false}}
       />
+      <HomeStack.Screen
+        name="ChatBotScreen"
+        component={ChatBotScreen}
+        options={({route}) => ({
+          title: 'Chat Hope',
+          headerShown: true,
+          headerTitleAlign: 'center',
+        })}
+      />
+      <HomeStack.Screen
+        name="ChatDoctorScreen"
+        component={ChatDoctorScreen}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="ChatPsikologScreen"
+        component={ChatPsikologScreen}
+        options={{headerShown: false}}
+      />
       {/* <HomeStack.Screen
         name="SosScreen"
         component={SosScreen}
@@ -223,17 +241,7 @@ const MainStack = props => {
           tabBarVisible: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 
-            if (
-              routeName === 'SearchMedicine' ||
-              routeName === 'Info Obat' ||
-              routeName === 'Detail Obat' ||
-              routeName === 'Layanan Kesehatan' ||
-              routeName === 'DetailSearchMedicine' ||
-              routeName === 'DetailSearchLayananKesehatan' ||
-              routeName === 'SearchLayananKesehatan' ||
-              routeName === 'InputNoTelp'
-              // routeName === 'SosScreen'
-            ) {
+            if (routeName === 'ChatBotScreen') {
               return false;
             }
 
@@ -255,11 +263,7 @@ const MainStack = props => {
         options={({route}) => ({
           tabBarVisible: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            if (
-              routeName === 'Konsultasi' ||
-              routeName === 'Konsultasi Dokter' ||
-              routeName === 'Konsultasi Psikolog'
-            ) {
+            if (routeName === 'InputNoTelp') {
               return false;
             }
 

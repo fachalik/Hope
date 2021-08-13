@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
@@ -7,15 +8,17 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Dimensions,
 } from 'react-native';
 import {
-  Avatar,
   CariDokter,
   InfoObat,
   RiwayatPenyakit,
   LayananKesehatan,
-  TelfonSOS,
+  Dokter,
+  psikolog,
+  Hope,
+  TanyaHope,
+  HopeTeman,
 } from '../../../../assets/images';
 import colors from '../../../../assets/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -23,21 +26,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
 import MainLayout from '../../../../components/MainLayout';
+import MainLayoutWithoutVertical from '../../../../components/MainLayoutWithoutVertical';
 import {IconAvatar} from '../../../../assets';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 const Home = props => {
   const navigation = useNavigation();
-  const [searchQuery, setSearchQuery] = useState('');
   const [data, setData] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const onChangeSearch = query => setSearchQuery(query);
-  const containerStyle = {
-    width: 300,
-    height: 100,
-    backgroundColor: colors.white,
-    borderRadius: 10,
-    alignSelf: 'center',
-  };
   useEffect(() => {
     navigation.addListener('focus', async () => {
       try {
@@ -57,27 +52,27 @@ const Home = props => {
   const LayananLainnya = [
     {
       id: 1,
-      request: 'Develop',
-      title: 'Riwayat Penyakit',
-      image: RiwayatPenyakit,
-    },
-    {
-      id: 2,
       request: 'Info Obat',
       title: 'Info Obat',
       image: InfoObat,
     },
     {
-      id: 3,
-      request: 'Develop',
-      title: 'Cari Dokter',
-      image: CariDokter,
-    },
-    {
-      id: 4,
+      id: 2,
       request: 'Layanan Kesehatan',
       title: 'Layanan Kesehatan',
       image: LayananKesehatan,
+    },
+    {
+      id: 3,
+      request: 'Develop',
+      title: 'Riwayat Penyakit',
+      image: RiwayatPenyakit,
+    },
+    {
+      id: 4,
+      request: 'Develop',
+      title: 'Cari Dokter',
+      image: CariDokter,
     },
   ];
   const displayLayananLainnya = () => {
@@ -103,21 +98,21 @@ const Home = props => {
   const LayananUtama = [
     {
       id: 1,
-      request: 'ChatBot',
+      request: 'ChatBotScreen',
       title: 'Chat HOPE',
-      image: RiwayatPenyakit,
+      image: Hope,
     },
     {
       id: 2,
       request: 'Develop',
       title: 'Chat Dokter',
-      image: RiwayatPenyakit,
+      image: Dokter,
     },
     {
       id: 3,
       request: 'Develop',
       title: 'Chat Psikolog',
-      image: RiwayatPenyakit,
+      image: psikolog,
     },
   ];
   const displayLayananUtama = () => {
@@ -139,52 +134,116 @@ const Home = props => {
       );
     });
   };
-  return (
-    <MainLayout>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <IconAvatar height="50" width="50" />
-          <View style={styles.headerTitle}>
-            <Text style={styles.headerTitleRegular}>Hi, </Text>
-            <Text style={styles.headerTitleBold}>
-              {props.route.params.first_name +
-                ' ' +
-                props.route.params.last_name}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.headerRight}>
-          <Text style={styles.headerTitle}>Mataram</Text>
-          <MaterialIcon name="location-on" size={24} color={colors.orange} />
-        </View>
-      </View>
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('SearchMedicine');
-        }}>
-        <View style={styles.searchBar}>
-          <View style={{marginRight: 10}}>
-            <Icon name="search1" size={20} color={colors.gray} />
+  const dataTentangKami = [
+    {
+      id: 1,
+      title: 'Apa itu HOPE?',
+      image: Hope,
+      simpleDesc: 'Hope ada personal health assistant 25/7',
+      desc: '',
+    },
+    {
+      id: 2,
+      title: 'Tanya HOPE!',
+      image: TanyaHope,
+      simpleDesc: 'Kamu dapat menanyakan tentang penyakit yang',
+      desc: '',
+    },
+    {
+      id: 3,
+      title: 'HOPE adalah temanmu!',
+      image: HopeTeman,
+      simpleDesc: 'Tidak hanya dapat mengatasi masalah kesehatan',
+      desc: '',
+    },
+  ];
+
+  const displayTentangKami = () => {
+    return dataTentangKami.map(item => {
+      return (
+        <TouchableOpacity
+          key={item.id}
+          onPress={() => {
+            alert(item.id);
+          }}>
+          <View style={styles.TentangKami}>
+            <View style={{flexDirection: 'row'}}>
+              <Image
+                source={item.image}
+                style={{width: 40, height: 40, resizeMode: 'contain'}}
+              />
+              <View style={styles.teksTentangKami}>
+                <Text style={styles.titleAbout}>{item.title}</Text>
+                <Text style={styles.textAbout}>{item.simpleDesc}</Text>
+              </View>
+            </View>
+            <MaterialIcon
+              name="arrow-forward-ios"
+              size={24}
+              color={colors.black}
+            />
           </View>
-          <View>
-            <Text>Cari Obatmu!</Text>
+        </TouchableOpacity>
+      );
+    });
+  };
+  return (
+    <ScrollView style={{backgroundColor: colors.backgroundColor}}>
+      <MainLayout boolean={isLoading}>
+        <View style={styles.header}>
+          <View style={styles.headerLeft}>
+            <IconAvatar height="50" width="50" />
+            <View style={styles.headerTitle}>
+              <Text style={styles.headerTitleRegular}>Hi, </Text>
+              <Text style={styles.headerTitleBold}>
+                {data.first_name + ' ' + data.last_name}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.headerRight}>
+            <Text style={styles.headerTitle}>Mataram</Text>
+            <MaterialIcon name="location-on" size={24} color={colors.orange} />
           </View>
         </View>
-      </TouchableOpacity>
-      <Text style={styles.TitleFont}>Layanan Utama</Text>
-      <View style={styles.ItemLayananUtama}>{displayLayananUtama()}</View>
-      <Text style={styles.TitleFont}>Layanan Lainnya</Text>
-      <View style={styles.ItemLayananUtama}>
-        <ScrollView
-          style={{height: 130}}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          {displayLayananLainnya()}
-        </ScrollView>
+
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('SearchMedicine');
+          }}>
+          <View style={styles.searchBar}>
+            <View style={{marginRight: 10}}>
+              <Icon name="search1" size={20} color={colors.gray} />
+            </View>
+            <View>
+              <Text>Cari Obatmu!</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {/* LayananUtama */}
+        <Text style={styles.TitleFont}>Layanan Utama</Text>
+        <View style={styles.ItemLayananUtama}>{displayLayananUtama()}</View>
+
+        {/* layanan Lainnya */}
+        <Text style={styles.TitleFont}>Layanan Lainnya</Text>
+      </MainLayout>
+      <View style={{marginLeft: 20}}>
+        <View style={styles.ItemLayananUtama}>
+          <ScrollView
+            style={{height: 120}}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            {displayLayananLainnya()}
+          </ScrollView>
+        </View>
       </View>
-      <Text style={styles.TitleFont}>Tentang Kami</Text>
-    </MainLayout>
+      <MainLayoutWithoutVertical>
+        {/* tentang kami */}
+        <Text style={styles.TitleFont}>Tentang Kami</Text>
+        {displayTentangKami()}
+      </MainLayoutWithoutVertical>
+    </ScrollView>
   );
 };
 
@@ -247,7 +306,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundColor,
     borderRadius: 10,
     marginVertical: 5,
-    marginRight: 5,
+    marginRight: 15,
     shadowColor: '#E3CFBD',
     shadowOffset: {
       width: 0,
@@ -271,7 +330,7 @@ const styles = StyleSheet.create({
   },
   TitleFont: {
     fontFamily: 'Poppins-SemiBold',
-    fontSize: 16,
+    fontSize: 14,
   },
   ItemLayananUtama: {
     flexDirection: 'row',
@@ -279,5 +338,29 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexWrap: 'wrap',
     height: 140,
+  },
+  TentangKami: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: colors.soft_gray,
+    borderRadius: 4,
+    flexDirection: 'row',
+    padding: 10,
+    marginVertical: 5,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  teksTentangKami: {
+    marginLeft: 10,
+    justifyContent: 'center',
+  },
+  titleAbout: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 12,
+  },
+  textAbout: {
+    fontFamily: 'Poppins-Regular',
+    color: colors.gray,
+    fontSize: 10,
   },
 });

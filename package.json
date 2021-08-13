@@ -34,6 +34,7 @@
     "react-native-svg-transformer": "^0.14.3",
     "react-native-uuid": "^2.0.1",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-webview": "^11.13.0",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22"
   },
   "devDependencies": {

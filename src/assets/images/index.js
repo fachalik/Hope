@@ -39,6 +39,11 @@ import Carousel3 from './Carrousel3.png';
 import Diet from './Diet.png';
 import Mata from './Mata.png';
 import Kulit from './Kulit.png';
+import Hope from './Hope.png';
+import HopeTeman from './HopeTeman.png';
+import TanyaHope from './TanyaHope.png';
+import Dokter from './Dokter.png';
+import psikolog from './psikolog.png';
 export {
   Avatar,
   SplashBackground,
@@ -81,4 +86,9 @@ export {
   Diet,
   Mata,
   Kulit,
+  Hope,
+  HopeTeman,
+  TanyaHope,
+  Dokter,
+  psikolog,
 };

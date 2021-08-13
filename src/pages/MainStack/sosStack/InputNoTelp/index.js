@@ -8,32 +8,38 @@ import {
   Dimensions,
 } from 'react-native';
 import colors from '../../../../assets/colors';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import MainLayout from '../../../../components/MainLayout';
 const InputNoTelp = ({navigation}) => {
   const [data, setData] = useState({
     noTeman: '',
     noOrtu: '',
+    noAmbulans: '',
     noTemanIsEmpty: true,
     noOrtuIsEmpty: true,
+    noAmbulansIsEmpty: true,
+    noTemanActive: false,
+    noOrtuActive: false,
+    noAmbulansActive: false,
   });
   const handleNoteman = val => {
     if (val.length != 0) {
       setData({
         ...data,
         noTeman: val,
-        noTemanIsEmpty: false,
+        noTemanIsEmpty: true,
       });
     } else {
       setData({
         ...data,
         noTeman: val,
-        noTemanIsEmpty: true,
+        noTemanIsEmpty: false,
       });
     }
   };
@@ -43,13 +49,29 @@ const InputNoTelp = ({navigation}) => {
       setData({
         ...data,
         noOrtu: val,
-        noOrtuIsEmpty: false,
+        noOrtuIsEmpty: true,
       });
     } else {
       setData({
         ...data,
         noOrtu: val,
-        noOrtuIsEmpty: true,
+        noOrtuIsEmpty: false,
+      });
+    }
+  };
+
+  const handleAmbulans = val => {
+    if (val.length != 0) {
+      setData({
+        ...data,
+        noAmbulans: val,
+        noAmbulansIsEmpty: true,
+      });
+    } else {
+      setData({
+        ...data,
+        noAmbulans: val,
+        noAmbulansIsEmpty: false,
       });
     }
   };
@@ -61,151 +83,174 @@ const InputNoTelp = ({navigation}) => {
     await navigation.pop();
   };
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>Input Nomer Telpon</Text>
-        <Text style={styles.text}>
-          Masukkan nomer telpon teman dan orang tua kamu
-        </Text>
+    <MainLayout>
+      <Text style={styles.title}>Nomor Darurat</Text>
+      <Text style={styles.text}>Masukkan nomor yang sesuai</Text>
+      <View style={styles.separator}>
         <View style={styles.form}>
+          {/* // Input Form for Nomor Orang Tua */}
           <View style={styles.TextInput}>
-            <Text style={{fontFamily: 'Karla-Medium'}}>Nomer Telpon Teman</Text>
+            <Text style={styles.TextInputFont}>Nomor Orang Tua</Text>
           </View>
-          <View style={styles.ViewInput}>
-            <Icon name="mail" size={20} color={colors.yellow} />
-            <Text style={{marginLeft: 10}}>+62</Text>
+          <View
+            style={styles.ViewInput(
+              data.noOrtuIsEmpty,
+              null,
+              data.noOrtuActive,
+            )}>
+            <Text>+62</Text>
             <TextInput
               style={styles.InputText}
-              placeholder="8XX-XXXX-XXXX"
+              onFocus={() => setData({...data, noOrtuActive: true})}
+              onBlur={() => setData({...data, noOrtuActive: false})}
+              placeholder="8XX XXXX XXXX"
               placeholderTextColor="grey"
-              keyboardType="phone-pad"
-              autoCapitalize="none"
-              onChangeText={val => handleNoteman(val)}
-            />
-          </View>
-          <View style={styles.TextInput}>
-            <Text style={{fontFamily: 'Karla-Medium'}}>Nomer Orang Tua</Text>
-          </View>
-          <View style={styles.ViewInput}>
-            <Icon name="mail" size={20} color={colors.yellow} />
-            <Text style={{marginLeft: 10}}>+62</Text>
-            <TextInput
-              style={styles.InputText}
-              placeholder="8XX-XXXX-XXXX"
-              placeholderTextColor="grey"
-              keyboardType="phone-pad"
-              autoCapitalize="none"
+              keyboardType="number-pad"
               onChangeText={val => handleNoOrtu(val)}
+              maxLength={11}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                alert('open phone book');
+              }}>
+              <Icon name="contacts" size={24} />
+            </TouchableOpacity>
+          </View>
+
+          {/* // Input Form for Nomor Teman */}
+          <View style={styles.TextInput}>
+            <Text style={styles.TextInputFont}>Nomor Teman</Text>
+          </View>
+          <View
+            style={styles.ViewInput(
+              data.noTemanIsEmpty,
+              null,
+              data.noTemanActive,
+            )}>
+            <Text>+62</Text>
+            <TextInput
+              style={styles.InputText}
+              onFocus={() => setData({...data, noTemanActive: true})}
+              onBlur={() => setData({...data, noTemanActive: false})}
+              placeholder="8XX XXXX XXXX"
+              placeholderTextColor="grey"
+              keyboardType="number-pad"
+              onChangeText={val => handleNoteman(val)}
+              maxLength={11}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                alert('open phone book');
+              }}>
+              <Icon name="contacts" size={24} />
+            </TouchableOpacity>
+          </View>
+
+          {/* // Input Form for Nomor Ambulans */}
+          <View style={styles.TextInput}>
+            <Text style={styles.TextInputFont}>Nomor Ambulans</Text>
+          </View>
+          <View
+            style={styles.ViewInput(
+              data.noAmbulansIsEmpty,
+              null,
+              data.noAmbulansActive,
+            )}>
+            <TextInput
+              style={styles.InputText}
+              onFocus={() => setData({...data, noAmbulansActive: true})}
+              onBlur={() => setData({...data, noAmbulansActive: false})}
+              placeholderTextColor="grey"
+              keyboardType="number-pad"
+              maxLength={11}
+              onChangeText={val => handleAmbulans(val)}
             />
           </View>
         </View>
-        <TouchableOpacity
-          disabled={!data.noTemanIsEmpty && !data.noOrtuIsEmpty ? false : true}
-          onPress={() => {
-            handleStoreNoTelp(data.noTeman, data.noOrtu);
-          }}>
-          <View
-            style={
-              !data.noOrtuIsEmpty && !data.noTemanIsEmpty
-                ? styles.buttonMasuk
-                : styles.buttonMasukDisable
-            }>
-            <Text style={styles.buttonTextMasukDisable}>TAMBAH</Text>
-          </View>
-        </TouchableOpacity>
       </View>
-    </View>
+    </MainLayout>
   );
 };
 
 export default InputNoTelp;
-const windowWidth = Dimensions.get('screen').width;
-const radius_size = 15;
-const button_height = 50;
-const width_button = windowWidth - 60;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.white,
+  title: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 36,
   },
-  wrapper: {
-    marginHorizontal: 30,
-    marginVertical: 30,
+  text: {
+    fontFamily: 'Karla-SemiBold',
+    fontSize: 16,
+    color: colors.gray,
   },
   form: {
-    width: wp('80%'),
-    height: hp('30%'),
-  },
-  ViewInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    borderWidth: 2,
-    marginTop: 10,
-    borderColor: colors.yellow,
-    borderRadius: 10,
-    paddingVertical: 2,
-  },
-  InputText: {
-    flex: 1,
-    alignItems: 'center',
-    width: 270,
-    height: 40,
-    paddingHorizontal: 10,
-    color: colors.black,
+    marginVertical: 10,
   },
   TextInput: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
-  title: {
-    color: '#05375a',
-    fontSize: 30,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  TextInputFont: {
+    fontFamily: 'Karla-Regular',
+    fontSize: 16,
   },
-  text: {
-    color: 'grey',
+  InputText: {
+    fontFamily: 'Karla-Regular',
+    fontSize: 16,
+    width: 300,
+    color: colors.black,
+  },
+  InputWarning: {
     marginTop: 5,
-    textAlign: 'center',
+    fontFamily: 'Karla-Regular',
+    fontSize: 14,
+    color: colors.warning,
   },
+  ViewInput: (condition, condition2, active) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    marginTop: 10,
+    borderColor:
+      condition || condition2
+        ? colors.warning
+        : active
+        ? colors.orange
+        : colors.gray,
+    borderRadius: 4,
+    paddingVertical: 2,
+  }),
   buttonMasuk: {
+    flex: 1,
     alignSelf: 'center',
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.orange,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
-    width: width_button,
-    height: button_height,
-    borderTopLeftRadius: radius_size,
-    borderTopRightRadius: radius_size,
-    borderBottomLeftRadius: radius_size,
-    borderBottomRightRadius: radius_size,
+    width: '100%',
+    height: 48,
+    borderRadius: 4,
   },
   buttonMasukDisable: {
+    flex: 1,
     alignSelf: 'center',
     backgroundColor: colors.gray,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
-    width: width_button,
-    height: button_height,
-    borderTopLeftRadius: radius_size,
-    borderTopRightRadius: radius_size,
-    borderBottomLeftRadius: radius_size,
-    borderBottomRightRadius: radius_size,
+    width: '100%',
+    height: 48,
+    borderRadius: 4,
   },
   buttonTextMasuk: {
     fontSize: 16,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Karla-Bold',
     color: colors.white,
   },
-  buttonTextMasukDisable: {
-    fontSize: 16,
-    fontFamily: 'Roboto-Bold',
-    color: colors.white,
+  separator: {
+    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
 });
