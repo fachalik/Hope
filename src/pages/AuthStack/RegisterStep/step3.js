@@ -18,93 +18,105 @@ import {AuthContext} from '../../../router/context';
 import config from '../../../../config';
 import axios from 'react-native-axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MainLayout from '../../../components/MainLayout';
 import PasswordStrengthIndicator from '../../../components/Universal/PasswordStrengthIndicator';
 
 const RegisterStep3 = ({navigation}) => {
   const isNumberRegx = /\d/;
   const specialCharacterRegx = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    ConfirmPassword: '',
-    check_TextEmail: false,
-    check_TextFirstName: false,
-    check_TextLastName: false,
-    secureTextEntry: true,
-    secureTextEntryConfirm: true,
-    emailIsEmpty: false,
-    passwordIsEmpty: false,
-    firstNameIsEmpty: false,
-    lastNameisEmpty: false,
-    confirmPasswordIsEmpty: false,
-    errorConfirmPassword: false,
-    errorEmail: false,
-  });
-  const [passwordFocused, setPasswordFocused] = useState(false);
   const [passwordValidity, setPasswordValidity] = useState({
     minChar: null,
     number: null,
     specialChar: null,
   });
+  const [data, setData] = useState({
+    namaDepan: '',
+    namaDepanIsEmpty: false,
+    namaDepanActive: false,
 
+    namBelakang: '',
+    namaBelakangIsEmpty: false,
+    namaBelakangActive: false,
+
+    email: '',
+    emailIsEmpty: false,
+    check_TextEmail: false,
+    emailActive: false,
+
+    katasandi: '',
+    kataSandiIsEmpty: false,
+    secureTextEntry: true,
+    kataSandiActive: false,
+
+    konfirmasiKatasandi: '',
+    konfirmasiKataSandiIsEmpty: false,
+    konfirmasiSecureTextEntry: true,
+    konfirmasiPasswordActive: false,
+
+    permission: false,
+  });
   const {SignUp} = useContext(AuthContext);
 
-  const firstNameChange = val => {
+  const textInputChangeNamaDepan = val => {
     if (val.length != 0) {
       setData({
         ...data,
-        firstName: val,
-        check_TextFirstName: true,
-        firstNameIsEmpty: true,
+        namaDepan: val,
+        namaDepanIsEmpty: false,
       });
     } else {
       setData({
         ...data,
-        firstName: val,
-        check_TextFirstName: false,
-        firstNameIsEmpty: false,
+        namaDepan: val,
+        namaDepanIsEmpty: true,
       });
     }
   };
-  const lasttNameChange = val => {
+
+  const textInputChangeNamaBelakang = val => {
     if (val.length != 0) {
       setData({
         ...data,
-        lastName: val,
-        check_TextLastName: true,
-        lastNameisEmpty: true,
+        namBelakang: val,
+        namaBelakangIsEmpty: false,
       });
     } else {
       setData({
         ...data,
-        lastName: val,
-        check_TextLastName: false,
-        lastNameisEmpty: false,
+        namBelakang: val,
+        namaBelakangIsEmpty: true,
       });
     }
   };
 
   const textInputChangeEmail = val => {
+    var pattern = new RegExp(
+      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
+    );
     if (val.length != 0) {
-      var pattern = new RegExp(
-        /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
-      );
+      setData({
+        ...data,
+        email: val,
+        emailIsEmpty: true,
+      });
       if (pattern.test(val)) {
         setData({
           ...data,
           email: val,
+          check_TextEmail: false,
+        });
+      } else {
+        setData({
+          ...data,
+          email: val,
           check_TextEmail: true,
-          emailIsEmpty: true,
         });
       }
     } else {
       setData({
         ...data,
         email: val,
-        check_TextEmail: false,
         emailIsEmpty: false,
       });
     }
@@ -114,8 +126,8 @@ const RegisterStep3 = ({navigation}) => {
     if (val.length > 7) {
       setData({
         ...data,
-        password: val,
-        passwordIsEmpty: true,
+        katasandi: val,
+        kataSandiIsEmpty: false,
       });
       setPasswordValidity({
         minChar: val.length >= 8 ? true : false,
@@ -125,8 +137,8 @@ const RegisterStep3 = ({navigation}) => {
     } else {
       setData({
         ...data,
-        password: val,
-        passwordIsEmpty: false,
+        katasandi: val,
+        passwordIsEmpty: true,
       });
       setPasswordValidity({
         minChar: val.length >= 8 ? true : false,
@@ -136,19 +148,19 @@ const RegisterStep3 = ({navigation}) => {
     }
   };
 
-  const handleConfirmPassword = (val, password) => {
+  const handleKonfirmasiPassword = (val, password) => {
     if (val === password) {
       console.log('betul');
       setData({
         ...data,
-        ConfirmPassword: val,
-        confirmPasswordIsEmpty: true,
+        konfirmasiKatasandi: val,
+        konfirmasiKataSandiIsEmpty: false,
       });
     } else {
       setData({
         ...data,
-        ConfirmPassword: val,
-        confirmPasswordIsEmpty: false,
+        konfirmasiKatasandi: val,
+        konfirmasiKataSandiIsEmpty: true,
       });
     }
   };
@@ -160,13 +172,28 @@ const RegisterStep3 = ({navigation}) => {
     });
   };
 
-  const updateSecureTextEntryConfirm = val => {
-    setData({
-      ...data,
-      secureTextEntryConfirm: !data.secureTextEntryConfirm,
-    });
+  const textInputChangeRegister = val => {
+    if (val.length != 0) {
+      setData({
+        ...data,
+        kodeRegistrasi: val,
+        kodeRegistrasiIsEmpty: false,
+      });
+    } else {
+      setData({
+        ...data,
+        kodeRegistrasi: val,
+        kodeRegistrasiIsEmpty: true,
+      });
+    }
   };
 
+  const updateSecureTextEntryKonfirmasi = val => {
+    setData({
+      ...data,
+      konfirmasiSecureTextEntry: !data.konfirmasiSecureTextEntry,
+    });
+  };
   const RegisterHandle = async (
     firstName,
     lastName,
@@ -240,249 +267,292 @@ const RegisterStep3 = ({navigation}) => {
     }
   };
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="height">
-      <ScrollView>
-        <View style={styles.wrapper}>
-          <BackButton navigation={navigation} />
-          <Text style={styles.title}>Informasi Umum</Text>
-          <View style={styles.form}>
-            {/* // Input Form for FirstName */}
-            <View style={styles.TextInput}>
-              <Text st>Nama Depan</Text>
-            </View>
-            <View style={styles.ViewInput}>
-              <Icon name="user" size={20} color={color.yellow} />
-              <TextInput
-                style={styles.InputText}
-                placeholder="Mohon masukkan nama depan anda"
-                placeholderTextColor="grey"
-                autoCapitalize="none"
-                onChangeText={val => firstNameChange(val)}
-              />
-              {data.check_TextFirstName ? (
-                <Feather name="check-circle" size={20} color={color.yellow} />
-              ) : null}
-            </View>
-
-            {/* // Input Form for FirstName */}
-            <View style={styles.TextInput}>
-              <Text st>Nama Belakang</Text>
-            </View>
-            <View style={styles.ViewInput}>
-              <Icon name="user" size={20} color={color.yellow} />
-              <TextInput
-                style={styles.InputText}
-                placeholder="Mohon masukkan nama belakang anda"
-                placeholderTextColor="grey"
-                autoCapitalize="none"
-                onChangeText={val => lasttNameChange(val)}
-              />
-              {data.check_TextLastName ? (
-                <Feather name="check-circle" size={20} color={color.yellow} />
-              ) : null}
-            </View>
-            {/* // Input Form for Email */}
-            <View style={styles.TextInput}>
-              <Text style={{fontFamily: 'Karla-Medium'}}>Email</Text>
-            </View>
-            <View style={styles.ViewInput}>
-              <Icon name="mail" size={20} color={color.yellow} />
-              <TextInput
-                style={styles.InputText}
-                placeholder="Mohon masukkan email anda"
-                keyboardType="email-address"
-                placeholderTextColor="grey"
-                autoCapitalize="none"
-                onChangeText={val => textInputChangeEmail(val)}
-              />
-
-              {data.check_TextEmail ? (
-                <Feather name="check-circle" size={20} color={color.yellow} />
-              ) : null}
-            </View>
-            {data.errorEmail ? (
-              <View style={styles.TextInput}>
-                <Text style={styles.errosMessages}>Email telah digunakan</Text>
-              </View>
-            ) : null}
-
-            {/* // Input Form for Password */}
-            <View style={styles.TextInput}>
-              <Text style={{fontFamily: 'Karla-Medium'}}>Kata sandi</Text>
-            </View>
-            <View style={styles.ViewInput}>
-              <Icon name="lock" size={20} color={color.yellow} />
-              <TextInput
-                secureTextEntry={data.secureTextEntry ? true : false}
-                style={styles.InputText}
-                placeholder="Mohon masukkan kata sandi anda"
-                autoCapitalize="none"
-                placeholderTextColor="grey"
-                onChangeText={val => handlePassword(val)}
-                onFocus={() => setPasswordFocused(true)}
-              />
-              <TouchableOpacity onPress={updateSecureTextEntry}>
-                {data.secureTextEntry ? (
-                  <Feather name="eye-off" size={20} color="grey" />
-                ) : (
-                  <Feather name="eye" size={20} color={color.yellow} />
-                )}
-              </TouchableOpacity>
-            </View>
-            <View style={styles.TextInput}>
-              {passwordFocused && (
-                <PasswordStrengthIndicator validity={passwordValidity} />
-              )}
-            </View>
-
-            {/* // Input Form for ConfirmPassword */}
-            <View style={styles.TextInput}>
-              <Text style={{fontFamily: 'Karla-Medium'}}>
-                Konfirmasi kata sandi
-              </Text>
-            </View>
-            <View style={styles.ViewInput}>
-              <Icon name="lock" size={20} color={color.yellow} />
-              <TextInput
-                secureTextEntry={data.secureTextEntryConfirm ? true : false}
-                style={styles.InputText}
-                autoCapitalize="none"
-                placeholder="Mohon masukkan kata sandi anda"
-                placeholderTextColor="grey"
-                onChangeText={val => handleConfirmPassword(val, data.password)}
-              />
-              <TouchableOpacity onPress={updateSecureTextEntryConfirm}>
-                {data.secureTextEntryConfirm ? (
-                  <Feather name="eye-off" size={20} color="grey" />
-                ) : (
-                  <Feather name="eye" size={20} color={color.yellow} />
-                )}
-              </TouchableOpacity>
-            </View>
-            {data.errorConfirmPassword ? (
-              <View style={styles.TextInput}>
-                <Text style={styles.errorMessages}>
-                  Password yang anda masukkan tidak sama
-                </Text>
-              </View>
-            ) : null}
-          </View>
-          <View style={styles.button}>
-            <TouchableOpacity
-              disabled={
-                data.emailIsEmpty &&
-                data.confirmPasswordIsEmpty &&
-                passwordValidity.minChar &&
-                passwordValidity.number &&
-                passwordValidity.specialChar
-                  ? false
-                  : true
-              }
-              onPress={() => {
-                RegisterHandle(
-                  data.firstName,
-                  data.lastName,
-                  data.email,
-                  data.password,
-                  data.ConfirmPassword,
-                );
-              }}>
-              <View
-                style={
-                  data.emailIsEmpty &&
-                  data.confirmPasswordIsEmpty &&
-                  passwordValidity.minChar &&
-                  passwordValidity.number &&
-                  passwordValidity.specialChar
-                    ? styles.buttonMasuk
-                    : styles.buttonMasukDisable
-                }>
-                {isLoading ? (
-                  <ActivityIndicator color={'white'} size="large" />
-                ) : (
-                  <Text style={styles.buttonTextMasuk}>BUAT AKUN BARU</Text>
-                )}
-              </View>
-            </TouchableOpacity>
-          </View>
+    <MainLayout boolean={isLoading}>
+      <BackButton navigation={navigation} />
+      <Text style={styles.title}>Daftar Akun</Text>
+      <Text style={styles.text}>Informasi umum</Text>
+      <View style={styles.form}>
+        {/* // Input Form for Nama Depan */}
+        <View style={styles.TextInput}>
+          <Text>Nama Depan</Text>
         </View>
-      </ScrollView>
-      {/* {isLoading ? <Loading loading={isLoading} /> : null} */}
-    </KeyboardAvoidingView>
+        <View
+          style={styles.ViewInput(
+            data.namaDepanIsEmpty,
+            null,
+            data.namaDepanActive,
+          )}>
+          <TextInput
+            style={styles.InputText}
+            placeholder="Mohon masukkan nama depan anda"
+            placeholderTextColor="grey"
+            onFocus={() => setData({...data, namaDepanActive: true})}
+            onBlur={() => setData({...data, namaDepanActive: false})}
+            autoCapitalize="none"
+            onChangeText={val => textInputChangeNamaDepan(val)}
+          />
+        </View>
+        {data.namaDepanIsEmpty ? (
+          <Text style={styles.InputWarning}>Nama depan harus diisi</Text>
+        ) : null}
+
+        {/* // Input Form for Nama Belakang */}
+        <View style={styles.TextInput}>
+          <Text>Nama Belakang</Text>
+        </View>
+        <View
+          style={styles.ViewInput(
+            data.namaBelakangIsEmpty,
+            null,
+            data.namaBelakangActive,
+          )}>
+          <TextInput
+            style={styles.InputText}
+            onFocus={() => setData({...data, namaBelakangActive: true})}
+            onBlur={() => setData({...data, namaBelakangActive: false})}
+            placeholder="Mohon masukkan nama belakang anda"
+            placeholderTextColor="grey"
+            autoCapitalize="none"
+            onChangeText={val => textInputChangeNamaBelakang(val)}
+          />
+        </View>
+        {data.namaBelakangIsEmpty ? (
+          <Text style={styles.InputWarning}>Nama depan harus diisi</Text>
+        ) : null}
+
+        {/* // Input Form for Email */}
+        <View style={styles.TextInput}>
+          <Text>Email</Text>
+        </View>
+        <View
+          style={styles.ViewInput(
+            data.emailIsEmpty,
+            data.check_TextEmail,
+            data.emailActive,
+          )}>
+          <TextInput
+            style={styles.InputText}
+            onFocus={() => setData({...data, emailActive: true})}
+            onBlur={() => setData({...data, emailActive: false})}
+            placeholder="Mohon masukkan email anda"
+            placeholderTextColor="grey"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            onChangeText={val => textInputChangeEmail(val)}
+          />
+        </View>
+        {data.emailIsEmpty ? (
+          <Text style={styles.InputWarning}>Email harus diisi</Text>
+        ) : null}
+        {data.check_TextEmail ? (
+          <Text style={styles.InputWarning}>
+            Email tidak sesuai dengan format
+          </Text>
+        ) : null}
+
+        {/* // Input Form for kata sandi */}
+        <View style={styles.TextInput}>
+          <Text>Kata Sandi</Text>
+        </View>
+        <View
+          style={styles.ViewInput(
+            data.kataSandiIsEmpty,
+            null,
+            data.kataSandiActive,
+          )}>
+          <TextInput
+            style={styles.InputText}
+            onFocus={() => setData({...data, kataSandiActive: true})}
+            onBlur={() => setData({...data, kataSandiActive: false})}
+            placeholder="Mohon masukkan kata sandi anda"
+            placeholderTextColor="grey"
+            autoCapitalize="none"
+            secureTextEntry={data.secureTextEntry ? true : false}
+            onChangeText={val => handlePassword(val)}
+          />
+          <TouchableOpacity onPress={updateSecureTextEntry}>
+            {data.secureTextEntry ? (
+              <Feather name="eye-off" size={20} color="grey" />
+            ) : (
+              <Feather name="eye" size={20} color={color.orange} />
+            )}
+          </TouchableOpacity>
+        </View>
+        {data.kataSandiIsEmpty ? (
+          <Text style={styles.InputWarning}>Kata sandi harus diisi</Text>
+        ) : null}
+        {data.kataSandiActive && (
+          <PasswordStrengthIndicator validity={passwordValidity} />
+        )}
+        {/* // Input Form for konfirmasi kata sandi */}
+        <View style={styles.TextInput}>
+          <Text>Konfirmasi kata Sandi</Text>
+        </View>
+        <View
+          style={styles.ViewInput(
+            data.konfirmasiKataSandiIsEmpty,
+            null,
+            data.konfirmasiPasswordActive,
+          )}>
+          <TextInput
+            style={styles.InputText}
+            onFocus={() => setData({...data, konfirmasiPasswordActive: true})}
+            onBlur={() => setData({...data, konfirmasiPasswordActive: false})}
+            placeholder="Mohon masukkan konfirmasi kata sandi anda"
+            placeholderTextColor="grey"
+            autoCapitalize="none"
+            secureTextEntry={data.secureTextEntry ? true : false}
+            onChangeText={val => handleKonfirmasiPassword(val, data.katasandi)}
+          />
+          <TouchableOpacity onPress={updateSecureTextEntryKonfirmasi}>
+            {data.konfirmasiSecureTextEntry ? (
+              <Feather name="eye-off" size={20} color="grey" />
+            ) : (
+              <Feather name="eye" size={20} color={color.orange} />
+            )}
+          </TouchableOpacity>
+        </View>
+        {data.konfirmasiKataSandiIsEmpty ? (
+          <Text style={styles.InputWarning}>
+            Konfirmasi kata sandi harus diisi
+          </Text>
+        ) : null}
+
+        <View style={styles.coloumn}>
+          <TouchableOpacity
+            style={styles.checkBox(data.permission)}
+            onPress={() => setData({...data, permission: !data.permission})}
+          />
+          <Text style={styles.permissioNormal}>
+            Saya menyetujui{' '}
+            <Text style={styles.permissioActive}>Syarat ketentuan </Text>
+            Hope
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          disabled={
+            !data.namaDepanIsEmpty &&
+            !data.namaBelakangIsEmpty &&
+            !data.emailIsEmpty &&
+            !data.kataSandiIsEmpty &&
+            !data.konfirmasiKataSandiIsEmpty &&
+            data.permission
+              ? false
+              : true
+          }
+          onPress={() => {
+            RegisterHandle(
+              data.namaDepan,
+              data.namBelakang,
+              data.email,
+              data.katasandi,
+              data.konfirmasiKatasandi,
+            );
+          }}>
+          <View
+            style={
+              !data.namaDepanIsEmpty &&
+              !data.namaBelakangIsEmpty &&
+              !data.emailIsEmpty &&
+              !data.kataSandiIsEmpty &&
+              !data.konfirmasiKataSandiIsEmpty &&
+              data.permission
+                ? styles.buttonMasuk
+                : styles.buttonMasukDisable
+            }>
+            <Text style={styles.buttonTextMasuk}>BUAT AKUN BARU</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </MainLayout>
   );
 };
 
 export default RegisterStep3;
-const windowWidth = Dimensions.get('screen').width;
-const radius_size = 15;
-const button_height = 50;
-const width_button = windowWidth - 60;
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: color.white,
-  },
-  wrapper: {
-    marginVertical: 50,
-    marginHorizontal: 30,
-  },
-  button: {},
-  illustrationHeader: {
-    alignSelf: 'center',
-    height: '40%',
-    width: '100%',
-  },
   title: {
-    marginTop: 30,
-    fontFamily: 'Roboto-Bold',
-    fontSize: 32,
+    fontFamily: 'Poppins-Bold',
+    fontSize: 36,
   },
   text: {
-    fontFamily: 'Roboto-Regular',
-
-    marginTop: 5,
-    opacity: 0.4,
+    fontFamily: 'Karla-SemiBold',
+    fontSize: 16,
+    color: color.gray,
   },
   form: {
     marginVertical: 10,
   },
-  ViewInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    borderWidth: 2,
-    marginTop: 10,
-    borderColor: color.yellow,
-    borderRadius: 10,
-    paddingVertical: 2,
-  },
   TextInput: {
+    fontFamily: 'Karla-Regular',
+    fontSize: 16,
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
-
   InputText: {
-    flex: 1,
-    alignItems: 'center',
-    width: 270,
-    height: 40,
-    paddingHorizontal: 10,
+    fontFamily: 'Karla-Regular',
+    fontSize: 16,
+    width: 300,
     color: color.black,
+  },
+  InputWarning: {
+    marginTop: 5,
+    fontFamily: 'Karla-Regular',
+    fontSize: 14,
+    color: color.warning,
+  },
+  ViewInput: (condition, condition2, active) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    marginTop: 10,
+    borderColor:
+      condition || condition2
+        ? color.warning
+        : active
+        ? color.orange
+        : color.gray,
+    borderRadius: 4,
+    paddingVertical: 2,
+  }),
+  coloumn: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  checkBox: check => ({
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    backgroundColor: check ? color.orange : color.backgroundColor,
+    borderWidth: check ? null : 1,
+  }),
+  permissioNormal: {
+    marginLeft: 10,
+    fontFamily: 'Karla-Regular',
+    fontSize: 14,
+    color: color.gray,
+    justifyContent: 'center',
+  },
+  permissioActive: {
+    fontFamily: 'Karla-Regular',
+    fontSize: 14,
+    color: color.orange,
+    justifyContent: 'center',
   },
   buttonMasuk: {
     flex: 1,
     alignSelf: 'center',
-    backgroundColor: color.yellow,
+    backgroundColor: color.orange,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
-    width: width_button,
-    height: button_height,
-    borderTopLeftRadius: radius_size,
-    borderTopRightRadius: radius_size,
-    borderBottomLeftRadius: radius_size,
-    borderBottomRightRadius: radius_size,
+    width: '100%',
+    height: 48,
+    borderRadius: 4,
   },
   buttonMasukDisable: {
     flex: 1,
@@ -491,16 +561,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
-    width: width_button,
-    height: button_height,
-    borderTopLeftRadius: radius_size,
-    borderTopRightRadius: radius_size,
-    borderBottomLeftRadius: radius_size,
-    borderBottomRightRadius: radius_size,
+    width: '100%',
+    height: 48,
+    borderRadius: 4,
   },
   buttonTextMasuk: {
     fontSize: 16,
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Karla-Bold',
     color: color.white,
   },
 });

@@ -29,7 +29,7 @@ import {useRoute} from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
-const ChatStack = createStackNavigator();
+const SOSStack = createStackNavigator();
 const AccountStack = createStackNavigator();
 
 const HomeStackScreen = (props, {navigation}) => {
@@ -131,7 +131,7 @@ const HomeStackScreen = (props, {navigation}) => {
         component={DetailSearchLayananKesehatan}
         options={{headerShown: false}}
       />
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="SosScreen"
         component={SosScreen}
         options={{
@@ -162,48 +162,30 @@ const HomeStackScreen = (props, {navigation}) => {
         name="InputNoTelp"
         component={InputNoTelp}
         options={{headerShown: false}}
-      />
+      /> */}
     </HomeStack.Navigator>
   );
 };
 
-const ChatStackScreen = (props, {navigation}) => {
+const SOSStackScreen = (props, {navigation}) => {
   const route = useRoute();
   return (
-    <ChatStack.Navigator initialRouteName="Chatbot">
-      <ChatStack.Screen
-        name="ChatBot"
-        component={ChatBot}
+    <SOSStack.Navigator initialRouteName="SosScreen">
+      <SOSStack.Screen
+        name="SOS"
+        component={SosScreen}
         options={{headerShown: false}}
       />
-      <ChatStack.Screen
-        name="Konsultasi"
-        component={ChatBotScreen}
+      <SOSStack.Screen
+        name="InputNoTelp"
+        component={InputNoTelp}
         options={({route}) => ({
-          title: route.name,
+          title: 'Input Nomor Penting',
           headerShown: true,
           headerTitleAlign: 'center',
         })}
       />
-      <ChatStack.Screen
-        name="Konsultasi Dokter"
-        component={ChatDoctorScreen}
-        options={({route}) => ({
-          title: route.name,
-          headerShown: true,
-          headerTitleAlign: 'center',
-        })}
-      />
-      <ChatStack.Screen
-        name="Konsultasi Psikolog"
-        component={ChatPsikologScreen}
-        options={({route}) => ({
-          title: route.name,
-          headerShown: true,
-          headerTitleAlign: 'center',
-        })}
-      />
-    </ChatStack.Navigator>
+    </SOSStack.Navigator>
   );
 };
 
@@ -231,29 +213,10 @@ const AccountStackScreen = (props, {navigation}) => {
 const MainStack = props => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Beranda"
       tabBar={props => <BottomNavigator {...props} />}>
       <Tab.Screen
-        name="ChatBot"
-        component={ChatStackScreen}
-        initialParams={props.data}
-        options={({route}) => ({
-          tabBarVisible: (route => {
-            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            if (
-              routeName === 'Konsultasi' ||
-              routeName === 'Konsultasi Dokter' ||
-              routeName === 'Konsultasi Psikolog'
-            ) {
-              return false;
-            }
-
-            return true;
-          })(route),
-        })}
-      />
-      <Tab.Screen
-        name="Home"
+        name="Beranda"
         component={HomeStackScreen}
         initialParams={props.data}
         options={({route}) => ({
@@ -286,7 +249,27 @@ const MainStack = props => {
         }}
       />
       <Tab.Screen
-        name="Account"
+        name="SOS"
+        component={SOSStackScreen}
+        initialParams={props.data}
+        options={({route}) => ({
+          tabBarVisible: (route => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+            if (
+              routeName === 'Konsultasi' ||
+              routeName === 'Konsultasi Dokter' ||
+              routeName === 'Konsultasi Psikolog'
+            ) {
+              return false;
+            }
+
+            return true;
+          })(route),
+        })}
+      />
+
+      <Tab.Screen
+        name="Profil"
         component={AccountStackScreen}
         initialParams={props.data}
         options={({route}) => ({

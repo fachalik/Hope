@@ -7,7 +7,7 @@ const PasswordStrengthIndicator = ({
 }) => {
   return (
     <View>
-      <Text>Password must contain:</Text>
+      <Text>Password Harus Memiliki:</Text>
       <Text>
         <PasswordStrengthIndicatorItem
           isValid={minChar}
@@ -23,7 +23,7 @@ const PasswordStrengthIndicator = ({
       <Text>
         <PasswordStrengthIndicatorItem
           isValid={specialChar}
-          text="Memiliki kurang lebih 1 karakter spesial"
+          text="Memiliki kurang lebih 1 karakter spesial (!, @, #, Dll)"
         />
       </Text>
     </View>

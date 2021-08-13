@@ -1,18 +1,32 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+  View,
+} from 'react-native';
 import color from '../../assets/colors';
 import {
   IconHomeActive,
   IconHome,
   IconProfile,
   IconProfileActive,
+  IconSOS,
+  IconSOSActive,
 } from '../../assets';
 
 const TabItem = ({isFocused, onPress, onLongPress, label}) => {
   const Icon = () => {
-    if (label === 'Home') return isFocused ? <IconHomeActive /> : <IconHome />;
-    if (label === 'Account')
+    if (label === 'Beranda') {
+      return isFocused ? <IconHomeActive /> : <IconHome />;
+    }
+    if (label === 'SOS') {
+      return isFocused ? <IconSOSActive /> : <IconSOS />;
+    }
+    if (label === 'Profil') {
       return isFocused ? <IconProfileActive /> : <IconProfile />;
+    }
 
     return <IconHome />;
   };
@@ -21,18 +35,26 @@ const TabItem = ({isFocused, onPress, onLongPress, label}) => {
       onPress={onPress}
       onLongPress={onLongPress}
       style={styles.container}>
-      <Icon />
-      <Text style={styles.Text(isFocused)}>{label}</Text>
+      <View style={styles.IconFile}>
+        <Icon />
+        <Text style={styles.Text(isFocused)}>{label}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 export default TabItem;
-
+const {width} = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     backgroundColor: color.backgroundColor,
+  },
+  IconFile: {
+    width: width / 3,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   Text: isFocused => ({
     fontFamily: isFocused ? 'Poppins-SemiBold' : 'Poppins-Regular',
