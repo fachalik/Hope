@@ -7,7 +7,6 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
 } from 'react-native';
 import colors from '../../../../assets/colors';
 import axios from 'react-native-axios';
@@ -17,6 +16,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import FastImage from 'react-native-fast-image';
 
 const RumahSakit = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,10 +56,10 @@ const RumahSakit = props => {
               }}>
               {item.name}
             </Text>
-            <Image
+            <FastImage
               source={{uri: item.image}}
               style={{width: 100, height: 100, resizeMode: 'cover'}}
-              resizeMethod="resize"
+              resizeMode={FastImage.resizeMode.contain}
             />
 
             <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>

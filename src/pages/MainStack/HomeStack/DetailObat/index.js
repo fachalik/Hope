@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {
@@ -20,6 +21,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import FastImage from 'react-native-fast-image';
 
 const DetailObat = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -148,15 +150,14 @@ const DetailObat = ({route, navigation}) => {
               }}>
               {item.name}
             </Text>
-            <Image
+            <FastImage
               source={{uri: item.image}}
               style={{
                 width: 100,
                 height: 100,
                 resizeMode: 'cover',
-                resizeMethod: 'resize',
               }}
-              resizeMethod="resize"
+              resizeMode={FastImage.resizeMode.contain}
             />
 
             <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
