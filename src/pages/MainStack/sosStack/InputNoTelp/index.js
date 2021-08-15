@@ -86,86 +86,112 @@ const InputNoTelp = ({navigation}) => {
     <MainLayout>
       <Text style={styles.title}>Nomor Darurat</Text>
       <Text style={styles.text}>Masukkan nomor yang sesuai</Text>
-      <View style={styles.separator}>
-        <View style={styles.form}>
-          {/* // Input Form for Nomor Orang Tua */}
-          <View style={styles.TextInput}>
-            <Text style={styles.TextInputFont}>Nomor Orang Tua</Text>
-          </View>
-          <View
-            style={styles.ViewInput(
-              data.noOrtuIsEmpty,
-              null,
-              data.noOrtuActive,
-            )}>
-            <Text>+62</Text>
-            <TextInput
-              style={styles.InputText}
-              onFocus={() => setData({...data, noOrtuActive: true})}
-              onBlur={() => setData({...data, noOrtuActive: false})}
-              placeholder="8XX XXXX XXXX"
-              placeholderTextColor="grey"
-              keyboardType="number-pad"
-              onChangeText={val => handleNoOrtu(val)}
-              maxLength={11}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                alert('open phone book');
-              }}>
-              <Icon name="contacts" size={24} />
-            </TouchableOpacity>
-          </View>
+      <View style={styles.asd}>
+        <View style={styles.separator}>
+          <View style={styles.form}>
+            {/* // Input Form for Nomor Orang Tua */}
+            <View style={styles.TextInput}>
+              <Text style={styles.TextInputFont}>Nomor Orang Tua</Text>
+            </View>
+            <View
+              style={styles.ViewInput(
+                data.noOrtuIsEmpty,
+                null,
+                data.noOrtuActive,
+              )}>
+              <Text>+62</Text>
+              <TextInput
+                style={styles.InputText}
+                onFocus={() => setData({...data, noOrtuActive: true})}
+                onBlur={() => setData({...data, noOrtuActive: false})}
+                placeholder="8XX XXXX XXXX"
+                placeholderTextColor="grey"
+                keyboardType="number-pad"
+                onChangeText={val => handleNoOrtu(val)}
+                maxLength={11}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ContactList');
+                }}>
+                <Icon name="contacts" size={24} />
+              </TouchableOpacity>
+            </View>
 
-          {/* // Input Form for Nomor Teman */}
-          <View style={styles.TextInput}>
-            <Text style={styles.TextInputFont}>Nomor Teman</Text>
-          </View>
-          <View
-            style={styles.ViewInput(
-              data.noTemanIsEmpty,
-              null,
-              data.noTemanActive,
-            )}>
-            <Text>+62</Text>
-            <TextInput
-              style={styles.InputText}
-              onFocus={() => setData({...data, noTemanActive: true})}
-              onBlur={() => setData({...data, noTemanActive: false})}
-              placeholder="8XX XXXX XXXX"
-              placeholderTextColor="grey"
-              keyboardType="number-pad"
-              onChangeText={val => handleNoteman(val)}
-              maxLength={11}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                alert('open phone book');
-              }}>
-              <Icon name="contacts" size={24} />
-            </TouchableOpacity>
-          </View>
+            {/* // Input Form for Nomor Teman */}
+            <View style={styles.TextInput}>
+              <Text style={styles.TextInputFont}>Nomor Teman</Text>
+            </View>
+            <View
+              style={styles.ViewInput(
+                data.noTemanIsEmpty,
+                null,
+                data.noTemanActive,
+              )}>
+              <Text>+62</Text>
+              <TextInput
+                style={styles.InputText}
+                onFocus={() => setData({...data, noTemanActive: true})}
+                onBlur={() => setData({...data, noTemanActive: false})}
+                placeholder="8XX XXXX XXXX"
+                placeholderTextColor="grey"
+                keyboardType="number-pad"
+                onChangeText={val => handleNoteman(val)}
+                maxLength={11}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  alert('open phone book');
+                }}>
+                <Icon name="contacts" size={24} />
+              </TouchableOpacity>
+            </View>
 
-          {/* // Input Form for Nomor Ambulans */}
-          <View style={styles.TextInput}>
-            <Text style={styles.TextInputFont}>Nomor Ambulans</Text>
+            {/* // Input Form for Nomor Ambulans */}
+            <View style={styles.TextInput}>
+              <Text style={styles.TextInputFont}>Nomor Ambulans</Text>
+            </View>
+            <View
+              style={styles.ViewInput(
+                data.noAmbulansIsEmpty,
+                null,
+                data.noAmbulansActive,
+              )}>
+              <TextInput
+                style={styles.InputText}
+                onFocus={() => setData({...data, noAmbulansActive: true})}
+                onBlur={() => setData({...data, noAmbulansActive: false})}
+                placeholderTextColor="grey"
+                keyboardType="number-pad"
+                maxLength={11}
+                onChangeText={val => handleAmbulans(val)}
+              />
+            </View>
           </View>
-          <View
-            style={styles.ViewInput(
-              data.noAmbulansIsEmpty,
-              null,
-              data.noAmbulansActive,
-            )}>
-            <TextInput
-              style={styles.InputText}
-              onFocus={() => setData({...data, noAmbulansActive: true})}
-              onBlur={() => setData({...data, noAmbulansActive: false})}
-              placeholderTextColor="grey"
-              keyboardType="number-pad"
-              maxLength={11}
-              onChangeText={val => handleAmbulans(val)}
-            />
-          </View>
+        </View>
+        <View style={styles.footer}>
+          <TouchableOpacity
+            disabled={
+              !data.noOrtuIsEmpty &&
+              !data.noTemanIsEmpty &&
+              !data.noAmbulansIsEmpty
+                ? false
+                : true
+            }
+            onPress={() => {
+              // loginHandle(data.email, data.katasandi);
+            }}>
+            <View
+              style={
+                !data.noOrtuIsEmpty &&
+                !data.noTemanIsEmpty &&
+                !data.noAmbulansIsEmpty
+                  ? styles.buttonMasuk
+                  : styles.buttonMasukDisable
+              }>
+              <Text style={styles.buttonTextMasuk}>TERAPKAN</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </MainLayout>
@@ -212,7 +238,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    marginTop: 10,
     borderColor:
       condition || condition2
         ? colors.warning

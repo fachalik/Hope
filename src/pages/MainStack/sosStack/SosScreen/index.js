@@ -56,7 +56,7 @@ const SosScreen = ({navigation}) => {
       id: 4,
       source: SOS,
       title: 'SOS',
-      number: '212',
+      number: '112',
     },
   ];
   const itemSOS = () => {

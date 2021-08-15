@@ -20,6 +20,7 @@ import {
   DetailSearchLayananKesehatan,
   SosScreen,
   InputNoTelp,
+  ContactList,
 } from '../pages';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -59,11 +60,6 @@ const HomeStackScreen = (props, {navigation}) => {
       <HomeStack.Screen
         name="Layanan Kesehatan"
         component={LayananKesehatan}
-        options={{headerShown: true, headerTitleAlign: 'center'}}
-      />
-      <HomeStack.Screen
-        name="Kategori obat"
-        component={KategoriObat}
         options={{headerShown: true, headerTitleAlign: 'center'}}
       />
       <HomeStack.Screen
@@ -203,6 +199,15 @@ const SOSStackScreen = (props, {navigation}) => {
           headerTitleAlign: 'center',
         })}
       />
+      <SOSStack.Screen
+        name="ContactList"
+        component={ContactList}
+        options={({route}) => ({
+          title: 'Kontak',
+          headerShown: true,
+          headerTitleAlign: 'center',
+        })}
+      />
     </SOSStack.Navigator>
   );
 };
@@ -241,7 +246,17 @@ const MainStack = props => {
           tabBarVisible: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
 
-            if (routeName === 'ChatBotScreen') {
+            if (
+              routeName === 'ChatBotScreen' ||
+              routeName === 'Info Obat' ||
+              routeName === 'Detail Obat' ||
+              routeName === 'Develop' ||
+              routeName === 'Layanan Kesehatan' ||
+              routeName === 'SearchMedicine' ||
+              routeName === 'DetailSearchMedicine' ||
+              routeName === 'SearchLayananKesehatan' ||
+              routeName === 'DetailLayananKesehatan'
+            ) {
               return false;
             }
 
@@ -263,7 +278,7 @@ const MainStack = props => {
         options={({route}) => ({
           tabBarVisible: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            if (routeName === 'InputNoTelp') {
+            if (routeName === 'InputNoTelp' || routeName === 'ContactList') {
               return false;
             }
 

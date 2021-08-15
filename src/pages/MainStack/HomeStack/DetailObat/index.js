@@ -150,7 +150,13 @@ const DetailObat = ({route, navigation}) => {
             </Text>
             <Image
               source={{uri: item.image}}
-              style={{width: 100, height: 100, resizeMode: 'cover'}}
+              style={{
+                width: 100,
+                height: 100,
+                resizeMode: 'cover',
+                resizeMethod: 'resize',
+              }}
+              resizeMethod="resize"
             />
 
             <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>

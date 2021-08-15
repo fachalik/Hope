@@ -5,12 +5,12 @@ import ChatDoctorScreen from './MainStack/HomeStack/ChatDoctorScreen';
 import ChatPsikologScreen from './MainStack/HomeStack/ChatPsikologScreen';
 import DetailObat from './MainStack/HomeStack/DetailObat';
 import InfoObat from './MainStack/HomeStack/InfoObat';
-import KategoriObat from './MainStack/HomeStack/InfoObat/Kategori';
 import LayananKesehatan from './MainStack/HomeStack/LayananKesehatan';
 
 //sosStack
 import SosScreen from './MainStack/sosStack/SosScreen';
 import InputNoTelp from './MainStack/sosStack/InputNoTelp';
+import ContactList from './MainStack/sosStack/ContactList';
 
 // ProfileStack
 import Profil from './MainStack/ProfileStack/Profile';
@@ -40,10 +40,10 @@ export {
   ChatPsikologScreen,
   DetailObat,
   InfoObat,
-  KategoriObat,
   LayananKesehatan,
   SosScreen,
   InputNoTelp,
+  ContactList,
   Profil,
   EditProfile,
   LoginRegistOnBoard,

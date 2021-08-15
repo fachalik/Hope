@@ -29,6 +29,7 @@ import MainLayout from '../../../../components/MainLayout';
 import MainLayoutWithoutVertical from '../../../../components/MainLayoutWithoutVertical';
 import {IconAvatar} from '../../../../assets';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+
 const Home = props => {
   const navigation = useNavigation();
   const [data, setData] = useState('');
@@ -180,8 +181,8 @@ const Home = props => {
             </View>
             <MaterialIcon
               name="arrow-forward-ios"
-              size={24}
-              color={colors.black}
+              size={12}
+              color={colors.gray_dark}
             />
           </View>
         </TouchableOpacity>

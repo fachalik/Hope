@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {
@@ -58,6 +59,7 @@ const RumahSakit = props => {
             <Image
               source={{uri: item.image}}
               style={{width: 100, height: 100, resizeMode: 'cover'}}
+              resizeMethod="resize"
             />
 
             <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
