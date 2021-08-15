@@ -94,9 +94,11 @@ const Home = props => {
           <View style={styles.imageDisplay2}>
             <FastImage
               source={item.image}
-              style={{width: 60, height: 60, resizeMode: 'contain'}}
+              style={{width: 50, height: 50, resizeMode: 'contain'}}
             />
-            <Text style={{fontFamily: 'Karla-Bold'}}>{item.title}</Text>
+            <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
+              {item.title}
+            </Text>
           </View>
         </TouchableOpacity>
       );
