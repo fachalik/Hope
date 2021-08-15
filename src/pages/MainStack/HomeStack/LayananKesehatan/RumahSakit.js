@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   FlatList,
+  ScrollView,
 } from 'react-native';
 import colors from '../../../../assets/colors';
 import axios from 'react-native-axios';
@@ -49,40 +50,83 @@ const RumahSakit = props => {
   const ListRumahSakit = () => {
     return data.map(item => {
       return (
-        <TouchableOpacity onPress={() => handleSnap(item)}>
-          <View
-            key={item.id}
-            style={{
-              width: 120,
-              height: 120,
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              flexDirection: 'column',
-              borderRadius: 999,
-              backgroundColor: colors.backgroundColor,
-              marginVertical: 5,
-            }}>
-            <FastImage
-              source={{uri: item.image}}
+        <View
+          style={{
+            borderRadius: 4,
+            backgroundColor: colors.backgroundColor,
+            padding: 10,
+            marginBottom: 30,
+            marginHorizontal: 10,
+            textAlign: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowOpacity: 0.32,
+            shadowRadius: 5.46,
+            elevation: 2,
+            justifyContent: 'space-between',
+          }}>
+          <View>
+            <View
+              key={item.id}
               style={{
-                width: 100,
-                height: 100,
+                width: 120,
+                height: 120,
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                flexDirection: 'column',
                 borderRadius: 999,
-                resizeMode: 'contain',
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-            />
+                backgroundColor: colors.backgroundColor,
+                marginVertical: 5,
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'Karla-Bold',
+                  fontSize: 10,
+                  textAlign: 'center',
+                  width: 100,
+                }}>
+                {item.name}
+              </Text>
+              <FastImage
+                source={{uri: item.image}}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 999,
+                  resizeMode: 'contain',
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            </View>
+            <View>
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => {
+                  handleSnap(item);
+                }}
+                style={{
+                  marginTop: 10,
+                  borderRadius: 4,
+                  backgroundColor: colors.backgroundColor,
+                  borderWidth: 1,
+                  borderColor: colors.orange,
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    padding: 10,
+                    fontSize: 10,
+                    fontFamily: 'Poppins-Medium',
+                  }}>
+                  Detail Informasi
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <Text
-            style={{
-              fontFamily: 'Karla-Bold',
-              fontSize: 10,
-              textAlign: 'center',
-              width: 100,
-            }}>
-            {item.name}
-          </Text>
-        </TouchableOpacity>
+        </View>
       );
     });
   };
@@ -137,8 +181,8 @@ const RumahSakit = props => {
   console.log(data);
   return (
     <>
-      <ActionSheet gestureEnabled={true} ref={DetailRS}>
-        <View style={{marginHorizontal: 30}}>
+      <ActionSheet extraScroll={1} gestureEnabled={true} ref={DetailRS}>
+        <ScrollView style={{marginHorizontal: 30}}>
           <Text style={styles.bigTitle}>{detail.name}</Text>
           <Text style={styles.title}>No. Telpon</Text>
           <Text style={styles.contents}>{detail.notelp}</Text>
@@ -152,7 +196,6 @@ const RumahSakit = props => {
           {detail.layanan === undefined ? null : (
             <FlatList
               data={detail.layanan}
-              key={detail.notelp}
               renderItem={({item}) => (
                 <View style={styles.column}>
                   <View key={item} style={styles.row}>
@@ -167,6 +210,7 @@ const RumahSakit = props => {
                   </View>
                 </View>
               )}
+              keyExtractor={item => item}
             />
           )}
           {detail.layananpoliklinik === undefined ? null : (
@@ -175,7 +219,6 @@ const RumahSakit = props => {
           {detail.layananpoliklinik === undefined ? null : (
             <FlatList
               data={detail.layananpoliklinik}
-              key={detail.notelp}
               renderItem={({item}) => (
                 <View style={styles.column}>
                   <View key={item} style={styles.row}>
@@ -190,9 +233,10 @@ const RumahSakit = props => {
                   </View>
                 </View>
               )}
+              keyExtractor={item => item}
             />
           )}
-        </View>
+        </ScrollView>
       </ActionSheet>
       <MainLayout boolean={isLoading}>
         <View style={styles.itemRumahSakit}>

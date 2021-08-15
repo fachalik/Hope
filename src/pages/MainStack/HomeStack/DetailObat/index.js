@@ -1,15 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect, createRef} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import axios from 'react-native-axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import config from '../../../../../config';
@@ -44,7 +36,7 @@ const DetailObat = ({route, navigation}) => {
 
   const DetailItem = createRef();
 
-  const handleSnap = async item => {
+  const handleSnap = item => {
     setDetail({
       ...data,
       name: item.name,
@@ -96,57 +88,95 @@ const DetailObat = ({route, navigation}) => {
   const Obat = () => {
     return data.map(item => {
       return (
-        <TouchableOpacity
-          key={item.id}
-          onPress={() => {
-            handleSnap(item);
-          }}
-          style={{marginBottom: 30, marginHorizontal: 20, textAlign: 'center'}}>
-          <View
-            style={{
-              width: 120,
-              height: 120,
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-              flexDirection: 'column',
-              backgroundColor: colors.backgroundColor,
-              borderRadius: 150 / 2,
-              marginVertical: 10,
-              shadowColor: '#E3CFBD',
-              shadowOffset: {
-                width: 0,
-                height: 12,
-              },
-              shadowOpacity: 0.58,
-              shadowRadius: 16.0,
-              elevation: 24,
-            }}>
-            <FastImage
-              source={{uri: item.image}}
+        <View
+          style={{
+            borderRadius: 4,
+            backgroundColor: colors.backgroundColor,
+            padding: 10,
+            marginBottom: 30,
+            marginHorizontal: 10,
+            textAlign: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 4,
+            },
+            shadowOpacity: 0.32,
+            shadowRadius: 5.46,
+            elevation: 2,
+            justifyContent: 'space-between',
+          }}>
+          <View>
+            <View
               style={{
-                width: 100,
-                height: 100,
-                borderRadius: 100 / 2,
-                resizeMode: 'cover',
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-            />
+                width: 140,
+                height: 140,
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                flexDirection: 'column',
+                backgroundColor: colors.backgroundColor,
+                borderRadius: 150 / 2,
+                marginVertical: 5,
+                shadowColor: colors.gray,
+                shadowOffset: {
+                  width: 0,
+                  height: 12,
+                },
+                shadowOpacity: 0.58,
+                shadowRadius: 16.0,
+                elevation: 10,
+              }}>
+              <FastImage
+                source={{uri: item.image}}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: 100 / 2,
+                  resizeMode: 'cover',
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            </View>
+            <View>
+              <Text
+                style={{
+                  fontFamily: 'Karla-Bold',
+                  fontSize: 10,
+                  textAlign: 'left',
+                  width: 100,
+                }}>
+                {item.name}
+              </Text>
+              <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
+                {item.price_range}
+              </Text>
+            </View>
           </View>
           <View>
-            <Text
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => {
+                handleSnap(item);
+              }}
               style={{
-                fontFamily: 'Karla-Bold',
-                fontSize: 10,
-                textAlign: 'center',
-                width: 100,
+                marginTop: 10,
+                borderRadius: 4,
+                backgroundColor: colors.backgroundColor,
+                borderWidth: 1,
+                borderColor: colors.orange,
               }}>
-              {item.name}
-            </Text>
-            <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
-              {item.price_range}
-            </Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  padding: 10,
+                  fontSize: 10,
+                  fontFamily: 'Poppins-Medium',
+                }}>
+                Detail Informasi
+              </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       );
     });
   };
@@ -212,6 +242,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginTop: 10,
     flexWrap: 'wrap',
+    marginBottom: 100,
   },
   header: {
     backgroundColor: colors.gray,

@@ -1,15 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-  Image,
-  Linking,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Linking} from 'react-native';
 import colors from '../../../../assets/colors';
 import axios from 'react-native-axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,11 +18,7 @@ const Ambulance = () => {
   const ListAmbulance = () => {
     return data.map(item => {
       return (
-        <TouchableOpacity
-          key={item.id}
-          onPress={() => {
-            Linking.openURL(`tel:${item.phone_number}`);
-          }}>
+        <View>
           <View
             style={{
               width: wp('40%'),
@@ -38,9 +26,17 @@ const Ambulance = () => {
               justifyContent: 'space-evenly',
               alignItems: 'center',
               flexDirection: 'column',
-              backgroundColor: colors.soft_gray,
-              borderRadius: 10,
+              borderRadius: 4,
+              backgroundColor: colors.backgroundColor,
               marginVertical: 5,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 4,
+              },
+              shadowOpacity: 0.32,
+              shadowRadius: 5.46,
+              elevation: 2,
             }}>
             <Text
               style={{
@@ -63,8 +59,30 @@ const Ambulance = () => {
             <Text style={{fontFamily: 'Karla-Regular', fontSize: 12}}>
               {item.phone_number}
             </Text>
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => {
+                Linking.openURL(`tel:${item.phone_number}`);
+              }}
+              style={{
+                marginTop: 10,
+                borderRadius: 4,
+                backgroundColor: colors.backgroundColor,
+                borderWidth: 1,
+                borderColor: colors.orange,
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  padding: 10,
+                  fontSize: 10,
+                  fontFamily: 'Poppins-Medium',
+                }}>
+                Hubungi Sekarang
+              </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       );
     });
   };
