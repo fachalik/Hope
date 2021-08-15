@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, createRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,11 +17,14 @@ import colors from '../../../../assets/colors';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import LoadingV2 from '../../../../components/Universal/LoadingV2';
+import Icon from 'react-native-vector-icons/AntDesign';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import FastImage from 'react-native-fast-image';
+import MainLayout from '../../../../components/MainLayout';
+import ActionSheet from 'react-native-actions-sheet';
 
 const DetailObat = ({route, navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,42 +41,10 @@ const DetailObat = ({route, navigation}) => {
     produsen: '',
     perhatian: '',
   });
-  const renderInner = () => (
-    <View style={styles.panel}>
-      <View style={{marginHorizontal: 30}}>
-        <Text style={styles.bigTitle}>{detail.name}</Text>
-        <Text style={styles.title}>Harga</Text>
-        <Text style={styles.contents}>{detail.harga}</Text>
-        <Text style={styles.title}>Deskripsi</Text>
-        <Text style={styles.contents}>{detail.deskripsi}</Text>
-        <Text style={styles.title}>Manfaat</Text>
-        <Text style={styles.contents}>{detail.manfaat}</Text>
-        <Text style={styles.title}>Komposisi</Text>
-        <Text style={styles.contents}>{detail.komposisi}</Text>
-        <Text style={styles.title}>Dosis</Text>
-        <Text style={styles.contents}>{detail.dosis}</Text>
-        <Text style={styles.title}>Penyajian</Text>
-        <Text style={styles.contents}>{detail.penyajian}</Text>
-        <Text style={styles.title}>Efek Samping</Text>
-        <Text style={styles.contents}>{detail.efekSamping}</Text>
-        <Text style={styles.title}>Produsen</Text>
-        <Text style={styles.contents}>{detail.produsen}</Text>
-        <Text style={styles.title}>Perhatian</Text>
-        <Text style={styles.contents}>{detail.perhatian}</Text>
-      </View>
-    </View>
-  );
 
-  const renderHeader = () => (
-    <View style={styles.header}>
-      <View style={styles.panelHeader}>
-        <View style={styles.panelHandle}></View>
-      </View>
-    </View>
-  );
+  const DetailItem = createRef();
 
-  const handleSnap = item => {
-    bs.current.snapTo(0);
+  const handleSnap = async item => {
     setDetail({
       ...data,
       name: item.name,
@@ -87,9 +58,9 @@ const DetailObat = ({route, navigation}) => {
       produsen: item.producer,
       perhatian: item.consideration,
     });
+    DetailItem.current?.setModalVisible();
   };
-  const bs = React.createRef();
-  const fall = new Animated.Value(1);
+
   useEffect(async () => {
     setIsLoading(true);
     var userToken = await AsyncStorage.getItem('userToken');
@@ -129,18 +100,39 @@ const DetailObat = ({route, navigation}) => {
           key={item.id}
           onPress={() => {
             handleSnap(item);
-          }}>
+          }}
+          style={{marginBottom: 30, marginHorizontal: 20, textAlign: 'center'}}>
           <View
             style={{
-              width: wp('40%'),
-              height: hp('20%'),
+              width: 120,
+              height: 120,
               justifyContent: 'space-evenly',
               alignItems: 'center',
               flexDirection: 'column',
-              backgroundColor: colors.soft_gray,
-              borderRadius: 10,
-              marginVertical: 5,
+              backgroundColor: colors.backgroundColor,
+              borderRadius: 150 / 2,
+              marginVertical: 10,
+              shadowColor: '#E3CFBD',
+              shadowOffset: {
+                width: 0,
+                height: 12,
+              },
+              shadowOpacity: 0.58,
+              shadowRadius: 16.0,
+              elevation: 24,
             }}>
+            <FastImage
+              source={{uri: item.image}}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 100 / 2,
+                resizeMode: 'cover',
+              }}
+              resizeMode={FastImage.resizeMode.contain}
+            />
+          </View>
+          <View>
             <Text
               style={{
                 fontFamily: 'Karla-Bold',
@@ -150,16 +142,6 @@ const DetailObat = ({route, navigation}) => {
               }}>
               {item.name}
             </Text>
-            <FastImage
-              source={{uri: item.image}}
-              style={{
-                width: 100,
-                height: 100,
-                resizeMode: 'cover',
-              }}
-              resizeMode={FastImage.resizeMode.contain}
-            />
-
             <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
               {item.price_range}
             </Text>
@@ -169,22 +151,48 @@ const DetailObat = ({route, navigation}) => {
     });
   };
   return (
-    <View style={styles.container}>
-      <BottomSheet
-        ref={bs}
-        snapPoints={[500, 0]}
-        renderContent={renderInner}
-        renderHeader={renderHeader}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-      />
-      <ScrollView style={styles.wrapper}>
+    <>
+      <ActionSheet gestureEnabled={true} ref={DetailItem}>
+        <View style={{marginHorizontal: 30}}>
+          <Text style={styles.bigTitle}>{detail.name}</Text>
+          <Text style={styles.title}>Harga</Text>
+          <Text style={styles.contents}>{detail.harga}</Text>
+          <Text style={styles.title}>Deskripsi</Text>
+          <Text style={styles.contents}>{detail.deskripsi}</Text>
+          <Text style={styles.title}>Manfaat</Text>
+          <Text style={styles.contents}>{detail.manfaat}</Text>
+          <Text style={styles.title}>Komposisi</Text>
+          <Text style={styles.contents}>{detail.komposisi}</Text>
+          <Text style={styles.title}>Dosis</Text>
+          <Text style={styles.contents}>{detail.dosis}</Text>
+          <Text style={styles.title}>Penyajian</Text>
+          <Text style={styles.contents}>{detail.penyajian}</Text>
+          <Text style={styles.title}>Efek Samping</Text>
+          <Text style={styles.contents}>{detail.efekSamping}</Text>
+          <Text style={styles.title}>Produsen</Text>
+          <Text style={styles.contents}>{detail.produsen}</Text>
+          <Text style={styles.title}>Perhatian</Text>
+          <Text style={styles.contents}>{detail.perhatian}</Text>
+        </View>
+      </ActionSheet>
+      <MainLayout boolean={isLoading}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('SearchMedicine');
+          }}>
+          <View style={styles.searchBar}>
+            <View style={{marginRight: 10}}>
+              <Icon name="search1" size={20} color={colors.gray} />
+            </View>
+            <View>
+              <Text>Cari Obatmu!</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
         <Text style={{fontFamily: 'Karla-Bold'}}>Pilihan produk kesehatan</Text>
         <View style={styles.itemObat}>{!isLoading ? <Obat /> : null}</View>
-      </ScrollView>
-      {isLoading ? <LoadingV2 loading={isLoading} /> : null}
-    </View>
+      </MainLayout>
+    </>
   );
 };
 
@@ -242,5 +250,13 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.gray,
     paddingTop: 20,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: colors.soft_gray,
+    padding: 10,
+    borderRadius: 4,
+    marginBottom: 10,
   },
 });

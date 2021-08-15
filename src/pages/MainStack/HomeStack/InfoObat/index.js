@@ -11,6 +11,8 @@ import {
 import dummyData from './dummyData';
 import colors from '../../../../assets/colors';
 import MainLayout from '../../../../components/MainLayout';
+import Icon from 'react-native-vector-icons/AntDesign';
+
 const Kategori = ({route, navigation}) => {
   const request = route.params;
   function doSomething(route) {
@@ -28,31 +30,61 @@ const Kategori = ({route, navigation}) => {
           }}>
           <View
             style={{
-              width: 105,
-              height: 105,
+              width: 90,
+              height: 90,
+              borderRadius: 9999,
               justifyContent: 'space-evenly',
               alignItems: 'center',
               flexDirection: 'column',
-              backgroundColor: colors.soft_gray,
-              borderRadius: 10,
-              marginVertical: 5,
+              backgroundColor: colors.backgroundColor,
+              marginVertical: 20,
+              marginHorizontal: 10,
+              shadowColor: '#E3CFBD',
+              shadowOffset: {
+                width: 0,
+                height: 12,
+              },
+              shadowOpacity: 0.58,
+              shadowRadius: 16.0,
+              elevation: 24,
             }}>
             <Image
               source={item.image}
-              style={{width: 40, height: 40, resizeMode: 'contain'}}
+              style={{width: 50, height: 50, resizeMode: 'contain'}}
               resizeMethod="resize"
             />
-            <Text style={{fontFamily: 'Karla-Bold', fontSize: 12}}>
-              {item.medicinefor}
-            </Text>
           </View>
+          <Text
+            style={{
+              fontFamily: 'Poppins-Medium',
+              fontSize: 12,
+              width: 100,
+              textAlign: 'center',
+            }}>
+            {item.medicinefor}
+          </Text>
         </TouchableOpacity>
       );
     });
   };
   return (
     <MainLayout>
-      <Text style={{fontFamily: 'Karla-Bold'}}>Cari Keluhanmu!</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('SearchMedicine');
+        }}>
+        <View style={styles.searchBar}>
+          <View style={{marginRight: 10}}>
+            <Icon name="search1" size={20} color={colors.gray} />
+          </View>
+          <View>
+            <Text>Cari Obatmu!</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+      <Text style={{fontFamily: 'Poppins-Regular', marginBottom: 5}}>
+        Cari Keluhanmu!
+      </Text>
       <View style={styles.itemlayanan}>
         <DisplayCategory />
       </View>
@@ -119,5 +151,13 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.gray,
     paddingTop: 20,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: colors.soft_gray,
+    padding: 10,
+    borderRadius: 4,
+    marginBottom: 20,
   },
 });

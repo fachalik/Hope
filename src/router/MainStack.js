@@ -255,7 +255,8 @@ const MainStack = props => {
               routeName === 'SearchMedicine' ||
               routeName === 'DetailSearchMedicine' ||
               routeName === 'SearchLayananKesehatan' ||
-              routeName === 'DetailLayananKesehatan'
+              routeName === 'DetailLayananKesehatan' ||
+              routeName === 'DetailSearchLayananKesehatan'
             ) {
               return false;
             }

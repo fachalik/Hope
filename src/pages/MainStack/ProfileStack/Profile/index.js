@@ -11,7 +11,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Title} from 'react-native-paper';
 import {Avatar} from '../../../../assets';
 import {AuthContext} from '../../../../router/context';
-import Loading from '../../../../components/Universal/Loading';
 import colors from '../../../../assets/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -20,6 +19,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import LoadingV2 from '../../../../components/Universal/LoadingV2';
 
 const Profile = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -127,7 +127,7 @@ const Profile = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      {isLoading ? <Loading loading={isLoading} /> : null}
+      {isLoading ? <LoadingV2 loading={isLoading} /> : null}
     </SafeAreaView>
   );
 };

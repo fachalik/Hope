@@ -14,7 +14,7 @@ import {
 } from 'react-native-responsive-screen';
 import Akun from './Akun';
 import Biodata from './Biodata';
-import Loading from '../../../../components/Universal/Loading';
+import LoadingV2 from '../../../../components/Universal/LoadingV2';
 
 const EditProfile = props => {
   const [choice, setChoice] = useState(true);
@@ -65,7 +65,7 @@ const EditProfile = props => {
           )}
         </View>
       </ScrollView>
-      {isLoading ? <Loading loading={isLoading} /> : null}
+      {isLoading ? <LoadingV2 loading={isLoading} /> : null}
     </SafeAreaView>
   );
 };

@@ -45,6 +45,7 @@ import HopeTeman from './HopeTeman.png';
 import TanyaHope from './TanyaHope.png';
 import Dokter from './Dokter.png';
 import psikolog from './psikolog.png';
+
 export {
   Avatar,
   SplashBackground,

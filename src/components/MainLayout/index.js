@@ -1,10 +1,15 @@
-import React from 'react';
-import {StyleSheet, ScrollView, KeyboardAvoidingView} from 'react-native';
-import color from '../../assets/colors';
+import React, {useState} from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  View,
+  Text,
+} from 'react-native';
+import colors from '../../assets/colors';
 import LoadingV2 from '../Universal/LoadingV2';
 
 const MainLayout = ({children, boolean}) => {
-  console.log(boolean);
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
       <ScrollView style={styles.wrapper}>{children}</ScrollView>
@@ -19,8 +24,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    // flex: 1,
-    backgroundColor: color.backgroundColor,
+    backgroundColor: colors.backgroundColor,
   },
   wrapper: {
     paddingHorizontal: 20,

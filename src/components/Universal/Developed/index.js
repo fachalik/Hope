@@ -1,35 +1,39 @@
 import React from 'react';
 import {StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import colors from '../../../assets/colors';
 
-const Loading = () => {
+const Developed = ({navigation}) => {
   return (
     <View style={styles.overlay}>
       <View style={styles.container}>
-        <ActivityIndicator color={'black'} />
-        <Text style={styles.text}>Loading...</Text>
+        <ActivityIndicator color={colors.orange} />
+        <Text style={styles.text}>InDevelop</Text>
       </View>
     </View>
   );
 };
 
-export default Loading;
+export default Developed;
 
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: colors.transparent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: 'white',
+    backgroundColor: colors.backgroundColor,
     flexDirection: 'row',
-    padding: 20,
+    paddingHorizontal: 50,
+    paddingVertical: 18,
     borderRadius: 8,
   },
   text: {
+    fontFamily: 'Roboto-Medium',
     marginLeft: 16,
-    fontSize: 18,
+    color: colors.black,
+    fontSize: 12,
     fontWeight: '500',
   },
 });

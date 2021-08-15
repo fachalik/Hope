@@ -18,6 +18,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import MainLayout from '../../../../components/MainLayout';
 
 const Ambulance = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -100,12 +101,11 @@ const Ambulance = () => {
   }, [null]);
   console.log(data);
   return (
-    <View>
-      {isLoading ? <ActivityIndicator color={'black'} size="large" /> : null}
+    <MainLayout boolean={isLoading}>
       <View style={styles.itemAmbulance}>
         {!isLoading ? <ListAmbulance /> : null}
       </View>
-    </View>
+    </MainLayout>
   );
 };
 

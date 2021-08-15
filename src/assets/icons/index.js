@@ -8,6 +8,11 @@ import IconSOS from './SOS.svg';
 import IconSOSActive from './SOSActive.svg';
 import IconAvatar from './Avatar.svg';
 import LogoTemp from './HopeTempLogo.svg';
+import Maintenance from './Maintenance.svg';
+import Freinds from './Freinds.svg';
+import Question from './Question.svg';
+import Searching from './Searching.svg';
+
 export {
   IconProfile,
   IconProfileActive,
@@ -19,4 +24,8 @@ export {
   IconSOSActive,
   IconAvatar,
   LogoTemp,
+  Maintenance,
+  Freinds,
+  Question,
+  Searching,
 };
