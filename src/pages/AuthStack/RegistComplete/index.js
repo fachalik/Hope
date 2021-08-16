@@ -29,7 +29,6 @@ const RegistComplete = ({navigation}) => {
 
 export default RegistComplete;
 const windowWidth = Dimensions.get('screen').width;
-const radius_size = 15;
 const button_height = 50;
 const width_button = windowWidth - 60;
 const styles = StyleSheet.create({
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white,
+    backgroundColor: colors.backgroundColor,
   },
   image: {
     width: width,
@@ -55,16 +54,13 @@ const styles = StyleSheet.create({
   buttonMasuk: {
     marginTop: 10,
     alignSelf: 'center',
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.orange,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
     width: width_button,
     height: button_height,
-    borderTopLeftRadius: radius_size,
-    borderTopRightRadius: radius_size,
-    borderBottomLeftRadius: radius_size,
-    borderBottomRightRadius: radius_size,
+    borderRadius: 4,
   },
   buttonTextMasuk: {
     fontSize: 16,

@@ -3,15 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView,
-  ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import color from '../../../assets/colors';
-import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import BackButton from '../../../components/Universal/BackButton';
 import {AuthContext} from '../../../router/context';
@@ -59,7 +55,7 @@ const RegisterStep3 = ({navigation}) => {
   const {SignUp} = useContext(AuthContext);
 
   const textInputChangeNamaDepan = val => {
-    if (val.length != 0) {
+    if (val.length !== 0) {
       setData({
         ...data,
         namaDepan: val,
@@ -75,7 +71,7 @@ const RegisterStep3 = ({navigation}) => {
   };
 
   const textInputChangeNamaBelakang = val => {
-    if (val.length != 0) {
+    if (val.length !== 0) {
       setData({
         ...data,
         namBelakang: val,
@@ -94,7 +90,7 @@ const RegisterStep3 = ({navigation}) => {
     var pattern = new RegExp(
       /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
     );
-    if (val.length != 0) {
+    if (val.length !== 0) {
       setData({
         ...data,
         email: val,
@@ -171,22 +167,6 @@ const RegisterStep3 = ({navigation}) => {
     });
   };
 
-  const textInputChangeRegister = val => {
-    if (val.length != 0) {
-      setData({
-        ...data,
-        kodeRegistrasi: val,
-        kodeRegistrasiIsEmpty: false,
-      });
-    } else {
-      setData({
-        ...data,
-        kodeRegistrasi: val,
-        kodeRegistrasiIsEmpty: true,
-      });
-    }
-  };
-
   const updateSecureTextEntryKonfirmasi = val => {
     setData({
       ...data,
@@ -200,9 +180,10 @@ const RegisterStep3 = ({navigation}) => {
     password,
     ConfirmPassword,
   ) => {
+    await console.log(firstName, lastName, email, password, ConfirmPassword);
     setIsLoading(true);
     //mergeItem to asyncstorage formstep1
-    if (password != ConfirmPassword) {
+    if (password !== ConfirmPassword) {
       setData({
         ...data,
         errorConfirmPassword: true,
@@ -216,42 +197,30 @@ const RegisterStep3 = ({navigation}) => {
       try {
         let confirmSuccess;
         confirmSuccess = null;
-        const jsonValue = await AsyncStorage.getItem('formStep1');
-        const parseJsonValue = await JSON.parse(jsonValue);
+        console.log(config.API_URL + 'auth/register');
         await axios
-          .post(config.API_URL + 'auth/register/', {
+          .post(config.API_URL + 'auth/register', {
             email: email,
             password: password,
-            profile: {
-              first_name: firstName,
-              last_name: lastName,
-              weight: 0,
-              height: 0,
-              job: '',
-              activities: '',
-              disease_history: '',
-            },
+            first_name: firstName,
+            last_name: lastName,
+            weight: 0,
+            height: 0,
+            job: '',
+            activities: '',
+            disease_history: '',
           })
-          .then(function (response) {
-            confirmSuccess = response.data.success;
-
-            AsyncStorage.setItem('RegistComplete', 'true');
-            confirmSuccess == 'True'
-              ? navigation.navigate('RegistComplete')
-              : null;
+          .then(async function (response) {
+            await console.log(response.data);
+            confirmSuccess = await response.data;
+            await AsyncStorage.setItem('RegistComplete', 'true');
+            Object.keys(confirmSuccess).length === 0 &&
+            (confirmSuccess.constructor === Object) === ''
+              ? null
+              : navigation.navigate('RegistComplete');
           })
-          .catch(function (error) {
-            if (error.response.data.email != undefined) {
-              setData({
-                ...data,
-                errorEmail: true,
-              });
-            } else {
-              setData({
-                ...data,
-                errorEmail: false,
-              });
-            }
+          .catch(async function (error) {
+            ToastAndroid.show(error.response.data.error, ToastAndroid.LONG);
           });
         await SignUp(email, password, confirmSuccess);
       } catch (e) {

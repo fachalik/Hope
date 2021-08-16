@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   ItemLayananUtama: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     flexWrap: 'wrap',
   },
   itemSos: {

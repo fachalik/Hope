@@ -47,21 +47,23 @@ const Home = props => {
   const HopeInformation1 = createRef();
   const HopeInformation2 = createRef();
   const HopeInformation3 = createRef();
-  useEffect(async () => {
-    try {
-      await console.log('running');
-      const jsonValue = await AsyncStorage.getItem('UserProfile');
-      const item = JSON.parse(jsonValue);
-      await setData({
-        ...data,
-        first_name: item.profile.first_name,
-        last_name: item.profile.last_name,
-      });
-      await console.log(item);
-    } catch (e) {
-      //   error reading value
-      console.log(e);
-    }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('UserProfile');
+        const item = JSON.parse(jsonValue);
+        await setData({
+          ...data,
+          first_name: item.profile.first_name,
+          last_name: item.profile.last_name,
+        });
+        await console.log(item);
+      } catch (e) {
+        //   error reading value
+        console.log(e);
+      }
+    });
+    return unsubscribe;
   }, [data, navigation]);
   const LayananLainnya = [
     {
@@ -162,7 +164,7 @@ const Home = props => {
       id: 1,
       title: 'Apa itu HOPE?',
       image: Hope,
-      simpleDesc: 'Hope ada personal health assistant 25/7',
+      simpleDesc: 'Hope ada personal health assistant 24/7',
       desc: '',
     },
     {

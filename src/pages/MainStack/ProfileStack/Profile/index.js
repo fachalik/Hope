@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
@@ -31,22 +30,24 @@ const Profile = ({navigation}) => {
   });
   const {SignOut} = useContext(AuthContext);
 
-  useEffect(async () => {
-    try {
-      await console.log('running');
-      const jsonValue = await AsyncStorage.getItem('UserProfile');
-      const item = JSON.parse(jsonValue);
-      await setData(item);
-      await setName({
-        ...data,
-        first_name: item.profile.first_name,
-        last_name: item.profile.last_name,
-      });
-      await console.log(item);
-    } catch (e) {
-      //   error reading value
-      console.log(e);
-    }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('UserProfile');
+        const item = JSON.parse(jsonValue);
+        await setData(item);
+        await setName({
+          ...data,
+          first_name: item.profile.first_name,
+          last_name: item.profile.last_name,
+        });
+        await console.log(item);
+      } catch (e) {
+        //   error reading value
+        console.log(e);
+      }
+    });
+    return unsubscribe;
   }, [data, navigation]);
 
   const logOutHandle = async () => {
