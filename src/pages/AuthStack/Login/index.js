@@ -83,7 +83,7 @@ const Login = ({navigation}) => {
 
   const loginHandle = async (email, password) => {
     await setIsLoading(true);
-    console.log(email, password);
+    // console.log(email, password);
     await SignIn(email, password);
     await setIsLoading(false);
   };
@@ -92,9 +92,7 @@ const Login = ({navigation}) => {
     <MainLayout boolean={isLoading}>
       <BackButton navigation={navigation} />
       <Text style={styles.title}>Selamat Datang</Text>
-      <Text style={styles.text}>
-        Masukkan e-mail dan password akun dokter anda
-      </Text>
+      <Text style={styles.text}>Masukkan e-mail dan password akun anda</Text>
       <View style={styles.separator}>
         <View style={styles.form}>
           {/* // Input Form for Email */}

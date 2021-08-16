@@ -123,7 +123,7 @@ const RegisterStep1 = ({navigation}) => {
           }),
         );
         const jsonValue = await AsyncStorage.getItem('formStep1');
-        await console.log(JSON.parse(jsonValue));
+        // await console.log(JSON.parse(jsonValue));
       } catch (e) {
         console.log(e);
       }

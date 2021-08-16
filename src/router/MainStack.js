@@ -33,7 +33,6 @@ const SOSStack = createStackNavigator();
 const AccountStack = createStackNavigator();
 
 const HomeStackScreen = (props, {navigation}) => {
-  console.log(props.route.params);
   return (
     <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen

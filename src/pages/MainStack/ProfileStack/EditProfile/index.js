@@ -87,14 +87,14 @@ const styles = StyleSheet.create({
     height: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.orange,
   },
   buttonOff: {
     width: wp('42%'),
     height: hp('6%'),
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.gray,
+    backgroundColor: colors.soft_gray,
   },
   titleButton: {
     color: colors.white,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Karla-Bold',
   },
   header: {
-    backgroundColor: colors.gray,
+    backgroundColor: colors.soft_gray,
 
     paddingTop: 20,
     borderTopLeftRadius: 20,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   panel: {
     padding: 20,
-    backgroundColor: colors.gray,
+    backgroundColor: colors.soft_gray,
     paddingTop: 20,
   },
   bullet: {

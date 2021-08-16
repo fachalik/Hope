@@ -3,8 +3,10 @@ import {StyleSheet, Text, View, Image, TextInput} from 'react-native';
 import colors from '../../../../assets/colors';
 import {Avatar} from '../../../../assets';
 const Akun = props => {
+  // console.log(props.props.params);
+  const item = props.props.params;
   const [data, setData] = useState({
-    email: props.props.params.user.email,
+    email: item.email,
     password: '',
     ConfirmPassword: '',
     check_TextEmail: false,

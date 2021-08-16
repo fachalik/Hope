@@ -1,12 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, createRef} from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  StatusBar,
   TouchableOpacity,
-  Image,
   ScrollView,
 } from 'react-native';
 import {
@@ -31,30 +30,39 @@ import {IconAvatar} from '../../../../assets';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import ActionSheet from 'react-native-actions-sheet';
 import FastImage from 'react-native-fast-image';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Home = props => {
+  // console.log(props.route.params);
   const navigation = useNavigation();
-  const [data, setData] = useState('');
+  const [data, setData] = useState({
+    first_name: '',
+    last_name: '',
+  });
   const [isLoading, setIsLoading] = useState(false);
   const onDevelop = createRef();
   const HopeInformation1 = createRef();
   const HopeInformation2 = createRef();
   const HopeInformation3 = createRef();
-
-  useEffect(() => {
-    navigation.addListener('focus', async () => {
-      try {
-        console.log('running');
-        const jsonValue = await AsyncStorage.getItem('UserProfile');
-        await setData(JSON.parse(jsonValue));
-        console.log(JSON.parse(jsonValue));
-        await setIsLoading(false);
-      } catch (e) {
-        //   error reading value
-        console.log(e);
-      }
-    });
-  }, [navigation]);
+  useEffect(async () => {
+    try {
+      await console.log('running');
+      const jsonValue = await AsyncStorage.getItem('UserProfile');
+      const item = JSON.parse(jsonValue);
+      await setData({
+        ...data,
+        first_name: item.profile.first_name,
+        last_name: item.profile.last_name,
+      });
+      await console.log(item);
+    } catch (e) {
+      //   error reading value
+      console.log(e);
+    }
+  }, [data, navigation]);
   const LayananLainnya = [
     {
       id: 1,
@@ -94,7 +102,11 @@ const Home = props => {
           <View style={styles.imageDisplay2}>
             <FastImage
               source={item.image}
-              style={{width: 50, height: 50, resizeMode: 'contain'}}
+              style={{
+                width: wp('10%'),
+                height: wp('10%'),
+                resizeMode: 'contain',
+              }}
             />
             <Text style={{fontFamily: 'Karla-Bold', fontSize: 10}}>
               {item.title}
@@ -457,18 +469,19 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-    elevation: 24,
+    elevation: 5,
   },
   imageDisplay2: {
-    width: 100,
-    height: 100,
+    width: wp('25%'),
+    height: wp('25%'),
     justifyContent: 'space-evenly',
     alignItems: 'center',
     flexDirection: 'column',
     backgroundColor: colors.backgroundColor,
     borderRadius: 10,
     marginVertical: 5,
-    marginRight: 15,
+    marginRight: 10,
+    marginLeft: 5,
     shadowColor: '#E3CFBD',
     shadowOffset: {
       width: 0,
@@ -476,7 +489,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.58,
     shadowRadius: 16.0,
-    elevation: 24,
+    elevation: 5,
   },
   IconSize: {
     width: 20,

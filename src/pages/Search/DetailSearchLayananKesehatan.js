@@ -16,7 +16,7 @@ import BackButton from '../../components/Universal/BackButton';
 import {useNavigation} from '@react-navigation/native';
 const DetailSearchLayananKesehatan = props => {
   const navigation = useNavigation();
-  console.log(props.route.params.request);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.wrapper}>

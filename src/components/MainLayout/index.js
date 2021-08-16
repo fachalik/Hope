@@ -3,11 +3,14 @@ import {
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
-  View,
-  Text,
+  Dimensions,
 } from 'react-native';
 import colors from '../../assets/colors';
 import LoadingV2 from '../Universal/LoadingV2';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const MainLayout = ({children, boolean}) => {
   return (
@@ -19,7 +22,6 @@ const MainLayout = ({children, boolean}) => {
 };
 
 export default MainLayout;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.backgroundColor,
   },
   wrapper: {
-    paddingHorizontal: 20,
-    marginTop: 30,
+    paddingHorizontal: wp('5%'),
+    marginTop: hp('3%'),
   },
 });

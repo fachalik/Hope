@@ -67,17 +67,15 @@ const Router = ({navigation}) => {
       userToken = null;
       RefreshToken = null;
       await axios
-        .post(config.API_URL + 'auth/login/', {
+        .post(config.API_URL + 'auth/login', {
           email: email,
           password: password,
         })
         .then(function (response) {
-          console.log(response.data);
-          userToken = response.data.access;
-          RefreshToken = response.data.refresh;
+          userToken = response.data.result.access;
+          RefreshToken = response.data.result.refresh;
           AsyncStorage.setItem('RefreshToken', RefreshToken);
           AsyncStorage.setItem('userToken', userToken);
-          console.log(RefreshToken + 'refresh');
         })
         .catch(function (error) {
           ToastAndroid.show(
@@ -87,28 +85,33 @@ const Router = ({navigation}) => {
         });
       if (userToken) {
         await axios
-          .get(config.API_URL + 'profile/me/', {
+          .get(config.API_URL + 'user/me/', {
             headers: {Authorization: 'Bearer ' + userToken},
           })
           .then(function (response) {
-            console.log(response.data);
-            const getData = response.data;
-            AsyncStorage.setItem('UserProfile', JSON.stringify(response.data));
+            const getData = response.data.result;
+            console.log('Data UserProfile', getData);
             setData({
               ...data,
               user: {
-                email: getData.user.email,
-                date_joined: getData.user.date_joined,
+                email: getData.email,
+                date_joined: getData.CreatedAt,
               },
-              first_name: getData.first_name,
-              last_name: getData.last_name,
-              weight: getData.weight,
-              height: getData.height,
-              job: getData.job,
-              activities: getData.activities,
-              disease_history: getData.disease_history,
+              first_name: getData.profile.first_name,
+              last_name: getData.profile.last_name,
+              weight: getData.profile.weight,
+              height: getData.profile.height,
+              job: getData.profile.job,
+              activities: getData.profile.activities,
+              disease_history: getData.profile.disease_history,
             });
-            console.log('userProfile berhasil disimpan');
+            AsyncStorage.setItem('UserProfile', JSON.stringify(getData))
+              .then(() => {
+                console.log('UserProfile was success saved in local');
+              })
+              .catch(() => {
+                console.log('There was some error in UserProfile');
+              });
           })
           .catch(function (error) {
             console.log(error);
@@ -140,7 +143,7 @@ const Router = ({navigation}) => {
       isUnmount = true;
     };
   }, []);
-  console.log(loginState.userToken);
+
   useEffect(() => {
     setTimeout(async () => {
       let userToken;
@@ -163,7 +166,6 @@ const Router = ({navigation}) => {
           activities: parseProfile.activities,
           disease_history: parseProfile.disease_history,
         });
-        console.log(userToken);
       } catch (e) {
         console.log(e);
       }

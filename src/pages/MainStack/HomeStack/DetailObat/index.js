@@ -57,16 +57,14 @@ const DetailObat = ({route, navigation}) => {
     setIsLoading(true);
     var userToken = await AsyncStorage.getItem('userToken');
     const RefreshToken = await AsyncStorage.getItem('RefreshToken');
-    await console.log(RefreshToken + ' refresh');
+
     await axios
-      .post(config.API_URL + 'auth/login/refresh/', {
+      .post(config.API_URL + 'auth/login/refresh', {
         refresh: RefreshToken,
       })
       .then(function (response) {
-        // console.log(response.data);
-        console.log(response.data);
-        AsyncStorage.setItem('userToken', response.data.access);
-        userToken = response.data.access;
+        AsyncStorage.setItem('userToken', response.data.result.access);
+        userToken = response.data.result.access;
       })
       .catch(function (error) {
         console.log(error);
@@ -76,8 +74,7 @@ const DetailObat = ({route, navigation}) => {
         headers: {Authorization: 'Bearer ' + userToken},
       })
       .then(function (response) {
-        console.log(response.data);
-        setIsData(response.data);
+        setIsData(response.data.result);
       })
       .catch(function (error) {
         console.log(error);
@@ -89,12 +86,13 @@ const DetailObat = ({route, navigation}) => {
     return data.map(item => {
       return (
         <View
+          key={item.ID}
           style={{
             borderRadius: 4,
             backgroundColor: colors.backgroundColor,
-            padding: 10,
+            padding: 20,
             marginBottom: 30,
-            marginHorizontal: 10,
+            marginHorizontal: wp('1%'),
             textAlign: 'center',
             shadowColor: '#000',
             shadowOffset: {
@@ -109,8 +107,8 @@ const DetailObat = ({route, navigation}) => {
           <View>
             <View
               style={{
-                width: 140,
-                height: 140,
+                width: wp('30%'),
+                height: wp('30%'),
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
                 flexDirection: 'column',
@@ -118,6 +116,7 @@ const DetailObat = ({route, navigation}) => {
                 borderRadius: 150 / 2,
                 marginVertical: 5,
                 shadowColor: colors.gray,
+                marginBottom: 10,
                 shadowOffset: {
                   width: 0,
                   height: 12,
@@ -129,8 +128,8 @@ const DetailObat = ({route, navigation}) => {
               <FastImage
                 source={{uri: item.image}}
                 style={{
-                  width: 100,
-                  height: 100,
+                  width: wp('25%'),
+                  height: wp('25%'),
                   borderRadius: 100 / 2,
                   resizeMode: 'cover',
                 }}
@@ -143,7 +142,7 @@ const DetailObat = ({route, navigation}) => {
                   fontFamily: 'Karla-Bold',
                   fontSize: 10,
                   textAlign: 'left',
-                  width: 100,
+                  width: wp('25%'),
                 }}>
                 {item.name}
               </Text>
@@ -183,7 +182,7 @@ const DetailObat = ({route, navigation}) => {
   return (
     <>
       <ActionSheet gestureEnabled={true} ref={DetailItem}>
-        <View style={{marginHorizontal: 30}}>
+        <View style={{marginHorizontal: wp('5%')}}>
           <Text style={styles.bigTitle}>{detail.name}</Text>
           <Text style={styles.title}>Harga</Text>
           <Text style={styles.contents}>{detail.harga}</Text>

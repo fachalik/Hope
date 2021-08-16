@@ -32,16 +32,14 @@ const SearchMedicine = ({navigation}) => {
         await setIsLoading(true);
         var userToken = await AsyncStorage.getItem('userToken');
         const RefreshToken = await AsyncStorage.getItem('RefreshToken');
-        await console.log(RefreshToken + ' refresh');
+
         await axios
           .post(config.API_URL + 'auth/login/refresh/', {
             refresh: RefreshToken,
           })
           .then(function (response) {
-            // console.log(response.data);
-            console.log(response.data);
-            AsyncStorage.setItem('userToken', response.data.access);
-            userToken = response.data.access;
+            AsyncStorage.setItem('userToken', response.data.result.access);
+            userToken = response.data.result.access;
           })
           .catch(function (error) {
             console.log(error);
@@ -51,8 +49,7 @@ const SearchMedicine = ({navigation}) => {
             headers: {Authorization: 'Bearer ' + userToken},
           })
           .then(function (response) {
-            // console.log(response)
-            setIsData(response.data);
+            setIsData(response.data.result);
           })
           .catch(function (error) {
             console.log(error);
@@ -63,8 +60,7 @@ const SearchMedicine = ({navigation}) => {
         console.log(e);
       }
     });
-  }, [null]);
-  console.log(data);
+  }, [navigation]);
   const textInputchangeQuery = async val => {
     if (val.length != 0) {
       await setQuery({
@@ -108,7 +104,7 @@ const SearchMedicine = ({navigation}) => {
             </TouchableOpacity>
           ) : null}
         </View>
-        <ScrollView style={{marginTop: 10, height:hp('80%')}}>
+        <ScrollView style={{marginTop: 10, height: hp('80%')}}>
           {!isLoading ? (
             query.text != '' ? (
               data
@@ -131,7 +127,7 @@ const SearchMedicine = ({navigation}) => {
                           request: medicine,
                         })
                       }>
-                      <View style={styles.ViewSearch} key={medicine.id}>
+                      <View style={styles.ViewSearch} key={medicine.ID}>
                         <Image
                           source={{uri: medicine.image}}
                           style={{width: 50, height: 50, marginRight: 10}}

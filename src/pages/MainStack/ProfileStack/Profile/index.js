@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useContext, useEffect} from 'react';
 import {
   StyleSheet,
@@ -22,33 +23,39 @@ import {
 import LoadingV2 from '../../../../components/Universal/LoadingV2';
 
 const Profile = ({navigation}) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({});
+  const [name, setName] = useState({
+    first_name: '',
+    last_name: '',
+  });
   const {SignOut} = useContext(AuthContext);
 
-  console.log('isLoading' + isLoading);
-  useEffect(() => {
-    navigation.addListener('focus', async () => {
-      try {
-        console.log('running');
-        const jsonValue = await AsyncStorage.getItem('UserProfile');
-        await setData(JSON.parse(jsonValue));
-        console.log(JSON.parse(jsonValue));
-        await setIsLoading(false);
-      } catch (e) {
-        //   error reading value
-        console.log(e);
-      }
-    });
-  }, [navigation]);
+  useEffect(async () => {
+    try {
+      await console.log('running');
+      const jsonValue = await AsyncStorage.getItem('UserProfile');
+      const item = JSON.parse(jsonValue);
+      await setData(item);
+      await setName({
+        ...data,
+        first_name: item.profile.first_name,
+        last_name: item.profile.last_name,
+      });
+      await console.log(item);
+    } catch (e) {
+      //   error reading value
+      console.log(e);
+    }
+  }, [data, navigation]);
 
   const logOutHandle = async () => {
     await setIsLoading(true);
-    await console.log('isloading true');
+
     await setTimeout(() => {
       SignOut();
     }, 2000);
-    await console.log('isloading false');
+
     await setIsLoading(false);
   };
   return (
@@ -74,9 +81,7 @@ const Profile = ({navigation}) => {
               <View style={{marginLeft: 20, flexDirection: 'column'}}>
                 <Text style={{color: colors.gray_dark}}>Selamat Datang</Text>
                 <Title style={[styles.title]}>
-                  {data.first_name === undefined && data.last_name === undefined
-                    ? null
-                    : data.first_name + ' ' + data.last_name}
+                  {name.first_name + ' ' + name.last_name}
                 </Title>
               </View>
             </View>
@@ -121,7 +126,7 @@ const Profile = ({navigation}) => {
             onPress={() => {
               logOutHandle();
             }}>
-            <Text style={{fontWeight: 'bold', color: colors.yellow}}>
+            <Text style={{fontWeight: 'bold', color: colors.orange}}>
               KELUAR
             </Text>
           </TouchableOpacity>
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: colors.white,
     borderWidth: 1,
-    borderColor: colors.yellow,
+    borderColor: colors.orange,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',

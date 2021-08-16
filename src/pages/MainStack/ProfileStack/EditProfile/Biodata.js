@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-unused-vars */
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -20,26 +22,27 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 const Biodata = props => {
+  const item = props.props.params.profile;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [goToAccount, setGoToAccount] = useState(false);
   const [tempData, setTempData] = useState({
-    firstName: props.props.params.first_name,
-    lastName: props.props.params.last_name,
-    height: String(props.props.params.height),
-    weight: String(props.props.params.weight),
-    job: props.props.params.job,
-    activity: props.props.params.activities,
-    diseaseHistory: props.props.params.disease_history,
+    firstName: item.first_name,
+    lastName: item.last_name,
+    height: String(item.height),
+    weight: String(item.weight),
+    job: item.job,
+    activity: item.activities,
+    diseaseHistory: item.disease_history,
   });
   const [data, setData] = useState({
-    firstName: props.props.params.first_name,
-    lastName: props.props.params.last_name,
-    height: String(props.props.params.height),
-    weight: String(props.props.params.weight),
-    job: props.props.params.job,
-    activity: props.props.params.activities,
-    diseaseHistory: props.props.params.disease_history,
+    firstName: item.first_name,
+    lastName: item.last_name,
+    height: String(item.height),
+    weight: String(item.weight),
+    job: item.job,
+    activity: item.activities,
+    diseaseHistory: item.disease_history,
     firstNameSame: true,
     lastNameSame: true,
     heightSame: true,
@@ -145,7 +148,7 @@ const Biodata = props => {
     await setModalVisible(false);
     await setGoToAccount(true);
     await props.handleIsLoading(false);
-    await navigation.navigate('Account');
+    await navigation.navigate('Profil');
   };
   const UpdateHistoryHandle = async (
     firstName,
@@ -166,35 +169,33 @@ const Biodata = props => {
       diseaseHistory,
     );
     await props.handleIsLoading(true);
-    //mergeItem to asyncstorage formstep1
+
     try {
       let confirmSuccess;
       confirmSuccess = null;
       var userToken = await AsyncStorage.getItem('userToken');
       const RefreshToken = await AsyncStorage.getItem('RefreshToken');
-      console.log(RefreshToken + ' refresh');
+
       await axios
-        .post(config.API_URL + 'auth/login/refresh/', {
+        .post(config.API_URL + 'auth/login/refresh', {
           refresh: RefreshToken,
         })
         .then(async function (response) {
-          // console.log(response.data);
-          console.log(response.data);
-          await AsyncStorage.setItem('userToken', response.data.access);
-          userToken = await response.data.access;
+          await AsyncStorage.setItem('userToken', response.data.result.access);
+          userToken = await response.data.result.access;
+          console.log('profileToken', userToken);
         })
         .catch(function (error) {
-          console.log(error);
+          console.log('errorGetToken', error);
         });
-      await console.log(userToken);
       await axios
         .put(
-          config.API_URL + 'profile/me/',
+          config.API_URL + 'user/me',
           {
             first_name: firstName,
             last_name: lastName,
-            weight: parseInt(weight),
-            height: parseInt(height),
+            weight: parseInt(weight, 10),
+            height: parseInt(height, 10),
             job: job,
             activities: activity,
             disease_history: diseaseHistory,
@@ -203,46 +204,45 @@ const Biodata = props => {
         )
         .then(function (response) {
           console.log(response.data);
-          confirmSuccess = response.status;
-          console.log(confirmSuccess);
+          // confirmSuccess = response.status;
+          // console.log(confirmSuccess);
         })
         .catch(function (error) {
           console.log(error);
         });
       await axios
-        .get(config.API_URL + 'profile/me/', {
+        .get(config.API_URL + 'user/me', {
           headers: {Authorization: 'Bearer ' + userToken},
         })
         .then(async function (response) {
-          const getData = response.data;
+          const getData = response.data.result;
           await AsyncStorage.setItem(
             'UserProfile',
-            JSON.stringify(response.data),
+            JSON.stringify(response.data.result),
           );
-          console.log(getData);
           await setData({
-            firstName: getData.first_name,
-            lastName: getData.last_name,
-            height: String(getData.height),
-            weight: String(getData.weight),
-            job: getData.job,
-            activity: getData.activities,
-            diseaseHistory: getData.disease_history,
+            firstName: getData.profile.first_name,
+            lastName: getData.profile.last_name,
+            height: String(getData.profile.height),
+            weight: String(getData.profile.weight),
+            job: getData.profile.job,
+            activity: getData.profile.activities,
+            diseaseHistory: getData.profile.disease_history,
           });
           await setTempData({
-            firstName: getData.first_name,
-            lastName: getData.last_name,
-            height: String(getData.height),
-            weight: String(getData.weight),
-            job: getData.job,
-            activity: getData.activities,
-            diseaseHistory: getData.disease_history,
+            firstName: getData.profile.first_name,
+            lastName: getData.profile.last_name,
+            height: String(getData.profile.height),
+            weight: String(getData.profile.weight),
+            job: getData.profile.job,
+            activity: getData.profile.activities,
+            diseaseHistory: getData.profile.disease_history,
           });
-          console.log('userProfile berhasil disimpan');
+
           await setModalVisible(true);
         })
         .catch(function (error) {
-          console.log(error);
+          console.log('error getdata', error);
         });
     } catch (e) {
       //   error reading value
@@ -441,8 +441,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
     marginTop: 10,
-    borderColor: colors.yellow,
-    backgroundColor: colors.white,
+    borderColor: colors.orange,
+    backgroundColor: colors.backgroundColor,
     borderRadius: 10,
     paddingVertical: 2,
   },
@@ -453,8 +453,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderWidth: 1,
     marginTop: 10,
-    borderColor: colors.yellow,
-    backgroundColor: colors.white,
+    borderColor: colors.orange,
+    backgroundColor: colors.backgroundColor,
     borderRadius: 10,
     paddingVertical: 2,
     marginHorizontal: 5,
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   buttonMasuk: {
     flex: 1,
     alignSelf: 'center',
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.orange,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
@@ -487,7 +487,7 @@ const styles = StyleSheet.create({
   buttonMasukDisable: {
     flex: 1,
     alignSelf: 'center',
-    backgroundColor: colors.gray,
+    backgroundColor: colors.soft_gray,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   buttonTextMasuk: {
     fontSize: 16,
     fontFamily: 'Roboto-Bold',
-    color: colors.white,
+    color: colors.backgroundColor,
   },
   centeredView: {
     flex: 1,
@@ -510,7 +510,7 @@ const styles = StyleSheet.create({
   modalView: {
     flexDirection: 'column',
     margin: 20,
-    backgroundColor: colors.white,
+    backgroundColor: colors.backgroundColor,
     width: wp('80%'),
     height: hp('30%'),
     alignItems: 'center',
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   headerModal: {
-    backgroundColor: colors.yellow,
+    backgroundColor: colors.orange,
     width: '100%',
     height: hp('8%'),
     justifyContent: 'center',
@@ -537,8 +537,8 @@ const styles = StyleSheet.create({
   },
   footerModal: {
     borderTopWidth: 1,
-    borderColor: colors.gray,
-    backgroundColor: colors.white,
+    borderColor: colors.soft_gray,
+    backgroundColor: colors.backgroundColor,
     width: '100%',
     height: hp('8%'),
     justifyContent: 'center',
@@ -557,7 +557,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: colors.yellow,
+    color: colors.orange,
     fontWeight: 'bold',
     textAlign: 'center',
   },

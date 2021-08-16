@@ -15,6 +15,7 @@ const Mytabs = () => {
         tabBarActiveTintColor: colors.black,
         tabBarInactiveTintColor: colors.gray,
         tabBarIndicatorStyle: {backgroundColor: colors.orange},
+        swipeEnabled: false,
       }}>
       <Tab.Screen
         name="RumahSakit"

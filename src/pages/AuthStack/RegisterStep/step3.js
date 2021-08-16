@@ -150,7 +150,6 @@ const RegisterStep3 = ({navigation}) => {
 
   const handleKonfirmasiPassword = (val, password) => {
     if (val === password) {
-      console.log('betul');
       setData({
         ...data,
         konfirmasiKatasandi: val,
@@ -201,7 +200,6 @@ const RegisterStep3 = ({navigation}) => {
     password,
     ConfirmPassword,
   ) => {
-    console.log(firstName, lastName, email, password, ConfirmPassword);
     setIsLoading(true);
     //mergeItem to asyncstorage formstep1
     if (password != ConfirmPassword) {
@@ -235,16 +233,14 @@ const RegisterStep3 = ({navigation}) => {
             },
           })
           .then(function (response) {
-            console.log(response.data);
             confirmSuccess = response.data.success;
-            console.log(confirmSuccess);
+
             AsyncStorage.setItem('RegistComplete', 'true');
             confirmSuccess == 'True'
               ? navigation.navigate('RegistComplete')
               : null;
           })
           .catch(function (error) {
-            console.log(error.response.data.email);
             if (error.response.data.email != undefined) {
               setData({
                 ...data,
@@ -263,7 +259,6 @@ const RegisterStep3 = ({navigation}) => {
         console.log(e);
       }
       await setIsLoading(false);
-      console.log(email, password, ConfirmPassword);
     }
   };
   return (

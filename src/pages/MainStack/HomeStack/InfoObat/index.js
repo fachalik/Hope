@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -12,6 +13,10 @@ import dummyData from './dummyData';
 import colors from '../../../../assets/colors';
 import MainLayout from '../../../../components/MainLayout';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Kategori = ({route, navigation}) => {
   const request = route.params;
@@ -30,15 +35,15 @@ const Kategori = ({route, navigation}) => {
           }}>
           <View
             style={{
-              width: 90,
-              height: 90,
+              width: wp('22%'),
+              height: wp('22%'),
               borderRadius: 9999,
               justifyContent: 'space-evenly',
               alignItems: 'center',
               flexDirection: 'column',
               backgroundColor: colors.backgroundColor,
-              marginVertical: 20,
-              marginHorizontal: 10,
+              marginVertical: wp('5%'),
+              marginHorizontal: wp('2.5%'),
               shadowColor: '#E3CFBD',
               shadowOffset: {
                 width: 0,
@@ -50,7 +55,11 @@ const Kategori = ({route, navigation}) => {
             }}>
             <Image
               source={item.image}
-              style={{width: 50, height: 50, resizeMode: 'contain'}}
+              style={{
+                width: wp('20%'),
+                height: wp('15%'),
+                resizeMode: 'contain',
+              }}
               resizeMethod="resize"
             />
           </View>
@@ -58,7 +67,7 @@ const Kategori = ({route, navigation}) => {
             style={{
               fontFamily: 'Poppins-Medium',
               fontSize: 12,
-              width: 100,
+              width: wp('27%'),
               textAlign: 'center',
             }}>
             {item.medicinefor}

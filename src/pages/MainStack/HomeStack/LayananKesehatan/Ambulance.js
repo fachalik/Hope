@@ -60,7 +60,7 @@ const Ambulance = () => {
               {item.phone_number}
             </Text>
             <TouchableOpacity
-              key={item.id}
+              key={item.ID}
               onPress={() => {
                 Linking.openURL(`tel:${item.phone_number}`);
               }}
@@ -90,16 +90,14 @@ const Ambulance = () => {
     setIsLoading(true);
     var userToken = await AsyncStorage.getItem('userToken');
     const RefreshToken = await AsyncStorage.getItem('RefreshToken');
-    await console.log(RefreshToken + ' refresh');
+
     await axios
-      .post(config.API_URL + 'auth/login/refresh/', {
+      .post(config.API_URL + 'auth/login/refresh', {
         refresh: RefreshToken,
       })
       .then(function (response) {
-        // console.log(response.data);
-        console.log(response.data);
-        AsyncStorage.setItem('userToken', response.data.access);
-        userToken = response.data.access;
+        AsyncStorage.setItem('userToken', response.data.result.access);
+        userToken = response.data.result.access;
       })
       .catch(function (error) {
         console.log(error);
@@ -109,15 +107,13 @@ const Ambulance = () => {
         headers: {Authorization: 'Bearer ' + userToken},
       })
       .then(function (response) {
-        // console.log(response.data);
-        setIsData(response.data);
+        setIsData(response.data.result);
       })
       .catch(function (error) {
         console.log(error);
       });
     await setIsLoading(false);
   }, [null]);
-  console.log(data);
   return (
     <MainLayout boolean={isLoading}>
       <View style={styles.itemAmbulance}>

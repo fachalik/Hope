@@ -32,16 +32,14 @@ const SearchLayananKesehatan = ({navigation}) => {
         await setIsLoading(true);
         var userToken = await AsyncStorage.getItem('userToken');
         const RefreshToken = await AsyncStorage.getItem('RefreshToken');
-        // await console.log(RefreshToken + ' refresh');
+
         await axios
-          .post(config.API_URL + 'auth/login/refresh/', {
+          .post(config.API_URL + 'auth/login/refresh', {
             refresh: RefreshToken,
           })
           .then(function (response) {
-            // console.log(response.data);
-            console.log(response.data);
-            AsyncStorage.setItem('userToken', response.data.access);
-            userToken = response.data.access;
+            AsyncStorage.setItem('userToken', response.data.result.access);
+            userToken = response.data.result.access;
           })
           .catch(function (error) {
             console.log(error);
@@ -51,7 +49,6 @@ const SearchLayananKesehatan = ({navigation}) => {
             headers: {Authorization: 'Bearer ' + userToken},
           })
           .then(function (response) {
-            // console.log(response.data);
             response.data.map(item => {
               setIsData(data => [...data, item]);
             });
@@ -64,11 +61,9 @@ const SearchLayananKesehatan = ({navigation}) => {
             headers: {Authorization: 'Bearer ' + userToken},
           })
           .then(function (response) {
-            // console.log(response.data);
             response.data.map(item => {
               setIsData(data => [...data, item]);
             });
-            // console.log('laboratory ' + response.data);
           })
           .catch(function (error) {
             console.log(error);
@@ -79,7 +74,7 @@ const SearchLayananKesehatan = ({navigation}) => {
         console.log(e);
       }
     });
-  }, [null]);
+  }, [navigation]);
   const textInputchangeQuery = async val => {
     if (val.length != 0) {
       await setQuery({

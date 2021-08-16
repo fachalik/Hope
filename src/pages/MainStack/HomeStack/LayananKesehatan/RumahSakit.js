@@ -51,12 +51,13 @@ const RumahSakit = props => {
     return data.map(item => {
       return (
         <View
+          key={item.ID}
           style={{
             borderRadius: 4,
             backgroundColor: colors.backgroundColor,
             padding: 10,
             marginBottom: 30,
-            marginHorizontal: 10,
+            marginHorizontal: wp('1%'),
             textAlign: 'center',
             shadowColor: '#000',
             shadowOffset: {
@@ -70,10 +71,9 @@ const RumahSakit = props => {
           }}>
           <View>
             <View
-              key={item.id}
               style={{
-                width: 120,
-                height: 120,
+                width: wp('30%'),
+                height: wp('30%'),
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
                 flexDirection: 'column',
@@ -93,10 +93,10 @@ const RumahSakit = props => {
               <FastImage
                 source={{uri: item.image}}
                 style={{
-                  width: 100,
-                  height: 100,
-                  borderRadius: 999,
-                  resizeMode: 'contain',
+                  width: wp('25%'),
+                  height: wp('25%'),
+                  borderRadius: 4,
+                  resizeMode: 'cover',
                 }}
                 resizeMode={FastImage.resizeMode.contain}
               />
@@ -134,16 +134,14 @@ const RumahSakit = props => {
     await setIsLoading(true);
     var userToken = await AsyncStorage.getItem('userToken');
     const RefreshToken = await AsyncStorage.getItem('RefreshToken');
-    // await console.log(RefreshToken + ' refresh');
+
     await axios
-      .post(config.API_URL + 'auth/login/refresh/', {
+      .post(config.API_URL + 'auth/login/refresh', {
         refresh: RefreshToken,
       })
       .then(function (response) {
-        // console.log(response.data);
-        console.log(response.data);
-        AsyncStorage.setItem('userToken', response.data.access);
-        userToken = response.data.access;
+        AsyncStorage.setItem('userToken', response.data.result.access);
+        userToken = response.data.result.access;
       })
       .catch(function (error) {
         console.log(error);
@@ -153,8 +151,7 @@ const RumahSakit = props => {
         headers: {Authorization: 'Bearer ' + userToken},
       })
       .then(function (response) {
-        // console.log(response.data);
-        response.data.map(item => {
+        response.data.result.map(item => {
           setIsData(data => [...data, item]);
         });
       })
@@ -166,11 +163,9 @@ const RumahSakit = props => {
         headers: {Authorization: 'Bearer ' + userToken},
       })
       .then(function (response) {
-        // console.log(response.data);
-        response.data.map(item => {
+        response.data.result.map(item => {
           setIsData(data => [...data, item]);
         });
-        console.log('laboratory ' + response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -178,7 +173,6 @@ const RumahSakit = props => {
     await setIsLoading(false);
   }, [null]);
 
-  console.log(data);
   return (
     <>
       <ActionSheet extraScroll={1} gestureEnabled={true} ref={DetailRS}>
