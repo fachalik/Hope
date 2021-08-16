@@ -12,9 +12,11 @@ import MainLayout from '../../../../components/MainLayout';
 import Contacts from 'react-native-contacts';
 import Icon from 'react-native-vector-icons/AntDesign';
 import colors from '../../../../assets/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ContactList = () => {
+const ContactList = ({route, navigation}) => {
   const [data, setData] = useState([]);
+  const [filter, setFilter] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState('');
 
@@ -42,14 +44,46 @@ const ContactList = () => {
       }
     });
     await setData(contactArr);
+    await setFilter(contactArr);
     await setIsLoading(false);
+  };
+
+  const searchQuery = text => {
+    if (text) {
+      const newData = data.filter(item => {
+        const itemData = item.displayName
+          ? item.displayName.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilter(newData);
+      setQuery(text);
+    } else {
+      setFilter(data);
+      setQuery(text);
+    }
+  };
+
+  const doSomething = async (router, nomer) => {
+    if (router === 'Teman') {
+      await AsyncStorage.setItem('NoTeman', nomer);
+    }
+    if (router === 'OrangTua') {
+      await AsyncStorage.setItem('NoOrtu', nomer);
+    }
+    await navigation.pop();
   };
 
   const renderItem = ({item}) => {
     return (
       <>
         {item.displayName !== null ? (
-          <TouchableOpacity key={item.contactId}>
+          <TouchableOpacity
+            key={item.contactId}
+            onPress={() =>
+              doSomething(route.params.request, item.phoneNumber.number)
+            }>
             <View style={styles.Kontak}>
               <View style={styles.IconNama}>
                 <Text>
@@ -85,12 +119,12 @@ const ContactList = () => {
             placeholder="Cari nama atau nomor telepon"
             placeholderTextColor="grey"
             keyboardType="name-phone-pad"
-            onChangeText={val => setQuery(val)}
+            onChangeText={val => searchQuery(val)}
           />
         </View>
       </View>
       <FlatList
-        data={data}
+        data={filter}
         renderItem={renderItem}
         keyExtractor={item => item.contactId}
       />

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -5,20 +6,16 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import colors from '../../../../assets/colors';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import MainLayout from '../../../../components/MainLayout';
+
 const InputNoTelp = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState({
-    noTeman: '',
+    noTem: '',
     noOrtu: '',
     noAmbulans: '',
     noTemanIsEmpty: true,
@@ -28,24 +25,46 @@ const InputNoTelp = ({navigation}) => {
     noOrtuActive: false,
     noAmbulansActive: false,
   });
+  useEffect(() => {
+    navigation.addListener('focus', async () => {
+      loadData();
+    });
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const nomerTeman = await AsyncStorage.getItem('NoTeman');
+      const nomerOrangTua = await AsyncStorage.getItem('NoOrtu');
+      const nomerAmbulans = await AsyncStorage.getItem('NoAmbulans');
+      await setData({
+        ...data,
+        noTem: nomerTeman,
+        noOrtu: nomerOrangTua,
+        noAmbulans: nomerAmbulans,
+      });
+    } catch (e) {
+      //   error reading value
+      console.log(e);
+    }
+  };
   const handleNoteman = val => {
-    if (val.length != 0) {
+    if (val.length !== 0) {
       setData({
         ...data,
-        noTeman: val,
+        noTem: val,
         noTemanIsEmpty: true,
       });
     } else {
       setData({
         ...data,
-        noTeman: val,
+        noTem: val,
         noTemanIsEmpty: false,
       });
     }
   };
 
   const handleNoOrtu = val => {
-    if (val.length != 0) {
+    if (val.length !== 0) {
       setData({
         ...data,
         noOrtu: val,
@@ -61,7 +80,7 @@ const InputNoTelp = ({navigation}) => {
   };
 
   const handleAmbulans = val => {
-    if (val.length != 0) {
+    if (val.length !== 0) {
       setData({
         ...data,
         noAmbulans: val,
@@ -76,15 +95,23 @@ const InputNoTelp = ({navigation}) => {
     }
   };
 
-  const handleStoreNoTelp = async (noTeman, noOrtu) => {
-    await AsyncStorage.setItem('NoTeman', '+62' + noTeman);
-    await AsyncStorage.setItem('NoOrtu', '+62' + noOrtu);
-    await alert('Nomer Telah Tersimpan');
+  const handleStoreNoTelp = async (TemanNo, OrtuNo, noAmbulans) => {
+    await AsyncStorage.setItem('NoTeman', TemanNo);
+    await AsyncStorage.setItem('OrtuNo', OrtuNo);
+    await AsyncStorage.setItem('NoAmbulans', noAmbulans);
     await navigation.pop();
   };
+
+  function doSomething(route) {
+    return navigation.navigate('ContactList', {
+      request: route,
+    });
+  }
+
   return (
-    <MainLayout>
+    <MainLayout boolean={isLoading}>
       <Text style={styles.title}>Nomor Darurat</Text>
+      <Text>{data.TemanNo}</Text>
       <Text style={styles.text}>Masukkan nomor yang sesuai</Text>
       <View style={styles.asd}>
         <View style={styles.separator}>
@@ -102,9 +129,10 @@ const InputNoTelp = ({navigation}) => {
               <Text>+62</Text>
               <TextInput
                 style={styles.InputText}
+                placeholder="8XX XXXX XXXX"
+                value={data.noOrtu}
                 onFocus={() => setData({...data, noOrtuActive: true})}
                 onBlur={() => setData({...data, noOrtuActive: false})}
-                placeholder="8XX XXXX XXXX"
                 placeholderTextColor="grey"
                 keyboardType="number-pad"
                 onChangeText={val => handleNoOrtu(val)}
@@ -112,7 +140,7 @@ const InputNoTelp = ({navigation}) => {
               />
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('ContactList');
+                  doSomething('OrangTua');
                 }}>
                 <Icon name="contacts" size={24} />
               </TouchableOpacity>
@@ -131,17 +159,18 @@ const InputNoTelp = ({navigation}) => {
               <Text>+62</Text>
               <TextInput
                 style={styles.InputText}
+                placeholder="8XX XXXX XXXX"
+                value={data.noTem}
                 onFocus={() => setData({...data, noTemanActive: true})}
                 onBlur={() => setData({...data, noTemanActive: false})}
-                placeholder="8XX XXXX XXXX"
                 placeholderTextColor="grey"
                 keyboardType="number-pad"
                 onChangeText={val => handleNoteman(val)}
-                maxLength={11}
+                maxLength={16}
               />
               <TouchableOpacity
                 onPress={() => {
-                  alert('open phone book');
+                  doSomething('Teman');
                 }}>
                 <Icon name="contacts" size={24} />
               </TouchableOpacity>
@@ -159,11 +188,12 @@ const InputNoTelp = ({navigation}) => {
               )}>
               <TextInput
                 style={styles.InputText}
+                defaultValue={data.noAmbulans}
                 onFocus={() => setData({...data, noAmbulansActive: true})}
                 onBlur={() => setData({...data, noAmbulansActive: false})}
                 placeholderTextColor="grey"
                 keyboardType="number-pad"
-                maxLength={11}
+                maxLength={16}
                 onChangeText={val => handleAmbulans(val)}
               />
             </View>
@@ -172,20 +202,20 @@ const InputNoTelp = ({navigation}) => {
         <View style={styles.footer}>
           <TouchableOpacity
             disabled={
-              !data.noOrtuIsEmpty &&
-              !data.noTemanIsEmpty &&
-              !data.noAmbulansIsEmpty
+              data.noOrtuIsEmpty &&
+              data.noTemanIsEmpty &&
+              data.noAmbulansIsEmpty
                 ? false
                 : true
             }
             onPress={() => {
-              // loginHandle(data.email, data.katasandi);
+              handleStoreNoTelp(data.noTem, data.noOrtu, data.noAmbulans);
             }}>
             <View
               style={
-                !data.noOrtuIsEmpty &&
-                !data.noTemanIsEmpty &&
-                !data.noAmbulansIsEmpty
+                data.noOrtuIsEmpty &&
+                data.noTemanIsEmpty &&
+                data.noAmbulansIsEmpty
                   ? styles.buttonMasuk
                   : styles.buttonMasukDisable
               }>

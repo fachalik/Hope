@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -16,79 +17,46 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MainLayout from '../../../../components/MainLayout';
 import {Teman, OrangTua, Ambulance, SOS} from '../../../../assets';
+
 const SosScreen = ({navigation}) => {
-  // const [noTeman, setNoTeman] = useState('');
-  // const [noOrtu, setNoOrtu] = useState('');
-  // useEffect(() => {
-  //   navigation.addListener('focus', async () => {
-  //     try {
-  //       const nomerTeman = await AsyncStorage.getItem('NoTeman');
-  //       await setNoTeman(nomerTeman);
-  //       const nomerOrangTua = await AsyncStorage.getItem('NoOrtu');
-  //       await setNoOrtu(nomerOrangTua);
-  //     } catch (e) {
-  //       //   error reading value
-  //       console.log(e);
-  //     }
-  //   });
-  // }, [navigation]);
-  // console.log(noTeman, noOrtu);
-  const items = [
-    {
-      id: 1,
-      source: Teman,
-      title: 'Hubungi Teman',
-      number: 'none',
-    },
-    {
-      id: 2,
-      source: Ambulance,
-      title: 'Hubungi Ambulans',
-      number: 'none',
-    },
-    {
-      id: 3,
-      source: OrangTua,
-      title: 'Hubungi Orang Tua',
-      number: 'none',
-    },
-    {
-      id: 4,
-      source: SOS,
-      title: 'SOS',
-      number: '112',
-    },
-  ];
-  const itemSOS = () => {
-    return items.map(item => {
-      return (
-        <View style={styles.itemSos} id={item.id}>
-          {item.number === 'none' ? (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('InputNoTelp');
-              }}>
-              <Image style={styles.iconEmergency} source={item.source} />
-              <Text style={styles.titleItem}>{item.title}</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL(`tel:${item.number}`);
-              }}>
-              <Image style={styles.iconEmergency} source={item.source} />
-              <Text style={styles.titleItem}>{item.title}</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      );
+  const [data, setData] = useState({
+    noTem: '',
+    noOrtu: '',
+    noAmbulans: '',
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    navigation.addListener('focus', async () => {
+      loadData();
     });
+  }, []);
+  const loadData = async () => {
+    try {
+      const nomerTeman = await AsyncStorage.getItem('NoTeman');
+      const nomerOrangTua = await AsyncStorage.getItem('NoOrtu');
+      const nomerAmbulans = await AsyncStorage.getItem('NoAmbulans');
+      await setData({
+        ...data,
+        noTem: nomerTeman,
+        noOrtu: nomerOrangTua,
+        noAmbulans: nomerAmbulans,
+      });
+    } catch (e) {
+      //   error reading value
+      console.log(e);
+    }
   };
   return (
     <MainLayout>
       <View style={styles.Header}>
         <Text style={styles.headerText}>SOS</Text>
-        <Icon name="questioncircleo" size={22} color={colors.gray} />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('InputNoTelp');
+          }}>
+          <Icon name="questioncircleo" size={22} color={colors.gray} />
+        </TouchableOpacity>
       </View>
       <View style={styles.content}>
         <View style={styles.Text}>
@@ -96,7 +64,59 @@ const SosScreen = ({navigation}) => {
           <Text style={styles.titleText}>Klik pilihan dibawah ini</Text>
         </View>
         <View style={styles.ButtonCard}>
-          <View style={styles.ItemLayananUtama}>{itemSOS()}</View>
+          <View style={styles.ItemLayananUtama}>
+            <View style={styles.itemSos}>
+              <TouchableOpacity
+                onPress={() => {
+                  data.noTem === '' ||
+                  data.noTem === null ||
+                  data.noTem === undefined
+                    ? navigation.navigate('InputNoTelp')
+                    : Linking.openURL(`tel:${data.noTem}`);
+                }}>
+                <Image style={styles.iconEmergency} source={Teman} />
+                <Text style={styles.titleItem}>Hubungi Teman</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.itemSos}>
+              <TouchableOpacity
+                onPress={() => {
+                  data.noOrtu === '' ||
+                  data.noOrtu === null ||
+                  data.noOrtu === undefined
+                    ? navigation.navigate('InputNoTelp')
+                    : Linking.openURL(`tel:${data.noOrtu}`);
+                }}>
+                <Image style={styles.iconEmergency} source={OrangTua} />
+                <Text style={styles.titleItem}>Hubungi Orang Tua</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.itemSos}>
+              <TouchableOpacity
+                onPress={() => {
+                  data.noAmbulans === '' ||
+                  data.noAmbulans === null ||
+                  data.noAmbulans === undefined
+                    ? navigation.navigate('InputNoTelp')
+                    : Linking.openURL(`tel:${data.noAmbulans}`);
+                }}>
+                <Image style={styles.iconEmergency} source={Ambulance} />
+                <Text style={styles.titleItem}>Hubungi Ambulans</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.itemSos}>
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(`tel:${'112'}`);
+                }}>
+                <Image style={styles.iconEmergency} source={SOS} />
+                <Text style={styles.titleItem}>SOS</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
       </View>
     </MainLayout>
