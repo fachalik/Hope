@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.jsx": "javascriptreact",
+  },
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}

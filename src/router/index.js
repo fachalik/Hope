@@ -9,6 +9,9 @@ import MainStack from './MainStack';
 import {Splash} from '../pages';
 import config from '../../config';
 import axios from 'react-native-axios';
+import GetLocation from 'react-native-get-location'
+import Geocoder from 'react-native-geocoding';
+
 const Router = ({navigation}) => {
   const [isSplash, setIsSplash] = useState(true);
   const [data, setData] = useState({
@@ -29,6 +32,24 @@ const Router = ({navigation}) => {
     userToken: null,
   };
 
+  Geocoder.init('AIzaSyCpBUFps2uZnfamR3zZPbkA6nz49XbctUM')
+  GetLocation.getCurrentPosition({
+    enableHighAccuracy: true,
+    timeout: 15000,
+  })
+  .then(location => {
+      console.log('Location', location.latitude);
+      Geocoder.from(location.latitude, location.longitude)
+      .then(json => {
+              var addressComponent = json.results[0].address_components[3];
+        console.log(addressComponent);
+      })
+      .catch(error => console.warn(error));
+  })
+  .catch(error => {
+      const { code, message } = error;
+      console.warn(code, message);
+  })
   const loginReducer = (prevState, action) => {
     switch (action.type) {
       case 'RETRIVE_TOKEN':
